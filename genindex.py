@@ -27,27 +27,22 @@ def generate_index():
             font-family: 'Noto Sans KR', sans-serif; 
             background-color: #020617; /* 매우 어두운 남색 배경 */
             color: #e2e8f0; /* 밝은 회색 텍스트 */
-        }}
-
-        /* 해킹/보안 분위기의 히어로 섹션 배경 이미지 및 오버레이 설정 */
-        .hero-security {{
-            /* 배경 이미지 URL: 사이버 보안 컨셉의 무료 이미지 사용 (필요시 변경 가능) */
-            background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 1)), 
-                              url('https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            /* 전체 화면 배경 이미지 적용 및 투명도(Overlay) 설정 */
+            background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)), 
+                              url('image_1a3201.jpg');
             background-size: cover;
+            background-attachment: fixed;
             background-position: center center;
-            background-repeat: no-repeat;
         }}
 
-        /* 카드 호버 효과: 약간 떠오르며 밝은 테두리 강조 */
-        .card-hover {{
-            transition: all 0.3s ease;
-            border: 1px solid #1e293b; /* 기본 어두운 테두리 */
+        /* 텍스트 리스트 호버 효과: 터미널 스타일 */
+        .list-hover {{
+            transition: all 0.2s ease;
         }}
-        .card-hover:hover {{
-            transform: translateY(-4px);
-            border-color: #0ea5e9; /* 호버 시 사이안(Cyan) 색상 테두리 강조 */
-            box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.3); /* 사이안 색상 그림자 */
+        .list-hover:hover {{
+            color: #22d3ee; /* 호버 시 사이안(Cyan) 색상 강조 */
+            padding-left: 0.5rem; /* 호버 시 살짝 우측으로 이동 */
+            background-color: rgba(15, 23, 42, 0.6); /* 어두운 반투명 배경 */
         }}
     </style>
     <!-- Tailwind 설정 커스터마이징 (다크 모드 활성화) -->
@@ -58,8 +53,8 @@ def generate_index():
     </script>
 </head>
 <body class="min-h-screen flex flex-col">
-    <!-- 헤더 섹션: 보안 테마 적용 및 강조 -->
-    <header class="hero-security text-white py-20 px-6 relative overflow-hidden">
+    <!-- 헤더 섹션: 배경 이미지를 body로 옮기고 hero-security 클래스 제거 -->
+    <header class="text-white py-20 px-6 relative overflow-hidden">
         <div class="max-w-4xl mx-auto relative z-10 text-center">
             <div class="inline-flex items-center justify-center space-x-3 mb-6 bg-slate-900/50 p-3 rounded-2xl backdrop-blur-sm border border-slate-700">
                 <!-- 아이콘 변경: 방패(보안) 및 터미널(해킹) 아이콘 사용 -->
@@ -148,37 +143,34 @@ def generate_index():
         # 섹션 헤더 크기 축소 및 스타일 변경
         content_body += f"""
         <section class="mb-8">
-            <div class="flex items-center space-x-3 mb-4 border-b border-slate-800 pb-2">
+            <div class="flex items-center space-x-3 mb-4 border-b border-slate-800/80 pb-2">
                 <i class="fas {folder_icon} text-cyan-600 text-lg"></i>
                 <h2 class="text-lg font-bold text-slate-300">{display_folder}</h2>
-                <span class="bg-slate-800 text-slate-400 text-xs font-mono px-2 py-1 rounded-md border border-slate-700">{len(files)} Files</span>
+                <span class="text-slate-500 text-xs font-mono ml-2">[{len(files)} objects]</span>
             </div>
-            <!-- 그리드 레이아웃: 카드를 더 작고 조밀하게 배치 (gap 줄임) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 박스 형태 제거: 단순하고 세련된 텍스트 리스트 형태로 변경 -->
+            <ul class="space-y-1 font-mono text-sm">
         """
         
-        # 파일 카드 디자인 변경: 어둡고 컴팩트하게
+        # 파일 목록 디자인 변경: 박스 제거 및 터미널 라인 스타일 적용
         for file in files:
             file_path = os.path.join(folder, file) if folder != "." else file
             display_name = file.replace('.html', '').replace('_', ' ').replace('-', ' ')
             
             content_body += f"""
-                <a href="{file_path}" target="_blank" class="card-hover bg-slate-900/50 p-4 rounded-lg shadow-sm flex items-center space-x-4 group">
-                    <div class="bg-slate-800/80 p-2 rounded-md text-cyan-500 group-hover:text-cyan-300 transition-colors">
-                        <i class="fas fa-file-shield text-lg"></i>
-                    </div>
-                    <div class="overflow-hidden flex-grow">
-                        <h3 class="font-medium text-slate-200 truncate text-sm group-hover:text-white transition-colors" title="{display_name}">{display_name}</h3>
-                        <p class="text-[10px] text-slate-500 mt-0.5 truncate font-mono">/{file}</p>
-                    </div>
-                    <div class="text-slate-600 group-hover:text-cyan-400 transition-colors text-sm">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                </a>
+                <li>
+                    <a href="{file_path}" target="_blank" class="list-hover flex items-center py-2 px-3 rounded border-l-2 border-transparent hover:border-cyan-500 group">
+                        <span class="text-slate-600 mr-3 group-hover:text-cyan-400 transition-colors">
+                            <i class="fas fa-chevron-right text-xs"></i>
+                        </span>
+                        <span class="text-slate-300 group-hover:text-cyan-300 transition-colors">{display_name}</span>
+                        <span class="ml-auto text-slate-600 text-xs opacity-0 group-hover:opacity-100 transition-opacity">/{file}</span>
+                    </a>
+                </li>
             """
             
         content_body += """
-            </div>
+            </ul>
         </section>
         """
 
