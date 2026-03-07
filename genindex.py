@@ -3,7 +3,7 @@ import markdown
 from datetime import datetime
 
 def generate_index():
-    # 제외할 폴더 및 파일 설정 (기능 유지)
+    # 제외할 폴더 및 파일 설정
     exclude_dirs = {'.git', '.github', '.pytest_cache', '__pycache__', 'assets'}
     exclude_files = {'index.html', 'generate_index.py', 'genindex.py', 'README.md'}
     
@@ -27,8 +27,8 @@ def generate_index():
             font-family: 'Noto Sans KR', sans-serif; 
             background-color: #020617; /* 매우 어두운 남색 배경 */
             color: #e2e8f0; /* 밝은 회색 텍스트 */
-            /* 전체 화면 배경 이미지 적용 및 투명도(Overlay) 설정 */
-            background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)), 
+            /* 전체 화면 배경 이미지 적용 및 투명도(Overlay) 설정: 사진이 잘 보이도록 투명도 낮춤 */
+            background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.4), rgba(2, 6, 23, 0.75)), 
                               url('image_1a3201.jpg');
             background-size: cover;
             background-attachment: fixed;
@@ -55,23 +55,30 @@ def generate_index():
 <body class="min-h-screen flex flex-col">
     <!-- 헤더 섹션: 배경 이미지를 body로 옮기고 hero-security 클래스 제거 -->
     <header class="text-white py-20 px-6 relative overflow-hidden">
-        <div class="max-w-4xl mx-auto relative z-10 text-center">
+        
+        <!-- 좌측 상단 브랜드 로고: Putto's Lectures -->
+        <div class="absolute top-6 left-6 md:left-10 flex items-center space-x-3 z-20">
+            <i class="fas fa-terminal text-cyan-400 text-xl"></i>
+            <span class="font-bold text-slate-100 tracking-widest font-mono text-sm md:text-base">PUTTO'S LECTURES</span>
+        </div>
+
+        <div class="max-w-4xl mx-auto relative z-10 text-center mt-4">
             <div class="inline-flex items-center justify-center space-x-3 mb-6 bg-slate-900/50 p-3 rounded-2xl backdrop-blur-sm border border-slate-700">
                 <!-- 아이콘 변경: 방패(보안) 및 터미널(해킹) 아이콘 사용 -->
                 <i class="fas fa-user-secret text-4xl text-cyan-400"></i>
                 <span class="text-slate-400">|</span>
                 <i class="fas fa-shield-halved text-4xl text-blue-500"></i>
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+            
+            <!-- 타이틀 텍스트: bg-clip-text 사용 시 꼬리가 잘리지 않도록 pb-2 추가 -->
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2 pb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
                 Cloud Security & Hacking Lab
             </h1>
-            <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            
+            <!-- 한글 서브 타이틀: 위 타이틀과 간격을 띄우기 위해 mt-6 추가 및 텍스트 밝기 상향 -->
+            <p class="mt-6 text-slate-200 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
                 실전 클라우드 인프라 보안 및 모의 해킹 시나리오 연구 자료 저장소
             </p>
-            <div class="mt-8 flex items-center justify-center text-sm text-slate-400 font-mono bg-black/30 inline-block px-4 py-2 rounded-full">
-                <i class="far fa-clock mr-2 text-cyan-500"></i>
-                <span>System Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</span>
-            </div>
         </div>
         <!-- 배경 장식용 희미한 그리드 패턴 -->
         <div class="absolute inset-0 bg-[url('https://tailwindcss.com/_next/static/media/hero-dark.9a75e138.png')] opacity-20 z-0 pointer-events-none"></div>
@@ -84,8 +91,8 @@ def generate_index():
     html_footer = """
     </main>
     <!-- 푸터: 다크 테마 적용 -->
-    <footer class="border-t border-slate-800/50 py-8 text-center text-slate-500 text-sm bg-slate-950">
-        <p class="font-mono">&copy; 2026 Security & Cloud Hacking Lab. All rights reserved. <span class="text-cyan-900">| Access Secured.</span></p>
+    <footer class="border-t border-slate-800/50 py-8 text-center text-slate-500 text-sm bg-slate-950/80 backdrop-blur-sm">
+        <p class="font-mono">&copy; 2026 Putto's Lectures. All rights reserved. <span class="text-cyan-900">| Access Secured.</span></p>
     </footer>
 </body>
 </html>
@@ -95,7 +102,7 @@ def generate_index():
     structure = {}
     
     # ---------------------------------------------------------------------------
-    # 1. 마크다운(.md) 파일을 찾아 HTML 파일로 사전 변환 (기능 유지, 디자인만 변경)
+    # 1. 마크다운(.md) 파일을 찾아 HTML 파일로 사전 변환
     # ---------------------------------------------------------------------------
     for root, dirs, files in os.walk('.'):
         dirs[:] = [d for d in dirs if d not in exclude_dirs]
@@ -123,7 +130,7 @@ def generate_index():
                     f.write(full_doc_html)
 
     # ---------------------------------------------------------------------------
-    # 2. 저장소 탐색 및 데이터 구조화 (기능 유지)
+    # 2. 저장소 탐색 및 데이터 구조화
     # ---------------------------------------------------------------------------
     for root, dirs, files in os.walk('.'):
         dirs[:] = [d for d in dirs if d not in exclude_dirs]
@@ -133,7 +140,7 @@ def generate_index():
             structure[rel_path] = html_files
 
     # ---------------------------------------------------------------------------
-    # 3. 루트 인덱스 HTML 생성 (디자인 변경: 리스트 강조 축소 및 컴팩트화)
+    # 3. 루트 인덱스 HTML 생성
     # ---------------------------------------------------------------------------
     for folder in sorted(structure.keys()):
         files = structure[folder]
