@@ -1,43 +1,82 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Putto's Lectures - 학습 콘텐츠 목록</title>
+    <title>Security & Cloud Hacking Lab</title>
+    <!-- Tailwind CSS 및 Typography 플러그인 로드 -->
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- Font Awesome 아이콘 로드 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Web Fonts (Noto Sans KR) 로드 -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        
+        /* 기본 글꼴 및 다크 모드 배경색 설정 */
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            background-color: #020617; /* 매우 어두운 남색 배경 */
+            color: #e2e8f0; /* 밝은 회색 텍스트 */
         }
+
+        /* 해킹/보안 분위기의 히어로 섹션 배경 이미지 및 오버레이 설정 */
+        .hero-security {
+            /* 배경 이미지 URL: 사이버 보안 컨셉의 무료 이미지 사용 (필요시 변경 가능) */
+            background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 1)), 
+                              url('https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        /* 카드 호버 효과: 약간 떠오르며 밝은 테두리 강조 */
         .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
+            border: 1px solid #1e293b; /* 기본 어두운 테두리 */
         }
         .card-hover:hover {
             transform: translateY(-4px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-color: #0ea5e9; /* 호버 시 사이안(Cyan) 색상 테두리 강조 */
+            box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.3); /* 사이안 색상 그림자 */
         }
     </style>
+    <!-- Tailwind 설정 커스터마이징 (다크 모드 활성화) -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
 </head>
-<body class="text-slate-800">
-    <header class="hero-gradient text-white py-12 px-6 shadow-lg mb-10">
-        <div class="max-w-5xl mx-auto">
-            <div class="flex items-center space-x-4 mb-4">
-                <i class="fas fa-graduation-cap text-4xl text-blue-400"></i>
-                <h1 class="text-4xl font-bold tracking-tight">Putto's Lectures</h1>
+<body class="min-h-screen flex flex-col">
+    <!-- 헤더 섹션: 보안 테마 적용 및 강조 -->
+    <header class="hero-security text-white py-20 px-6 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <div class="inline-flex items-center justify-center space-x-3 mb-6 bg-slate-900/50 p-3 rounded-2xl backdrop-blur-sm border border-slate-700">
+                <!-- 아이콘 변경: 방패(보안) 및 터미널(해킹) 아이콘 사용 -->
+                <i class="fas fa-user-secret text-4xl text-cyan-400"></i>
+                <span class="text-slate-400">|</span>
+                <i class="fas fa-shield-halved text-4xl text-blue-500"></i>
             </div>
-            <p class="text-slate-300 text-lg">공용 클라우드 및 IT 기술 교육 자료 저장소</p>
-            <div class="mt-6 flex items-center text-sm text-slate-400">
-                <i class="far fa-clock mr-2"></i>
-                <span>마지막 업데이트: 2026-03-07 14:40</span>
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+                Cloud Security & Hacking Lab
+            </h1>
+            <p class="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                실전 클라우드 인프라 보안 및 모의 해킹 시나리오 연구 자료 저장소
+            </p>
+            <div class="mt-8 flex items-center justify-center text-sm text-slate-400 font-mono bg-black/30 inline-block px-4 py-2 rounded-full">
+                <i class="far fa-clock mr-2 text-cyan-500"></i>
+                <span>System Last Updated: 2026-03-07 14:52:20</span>
             </div>
         </div>
+        <!-- 배경 장식용 희미한 그리드 패턴 -->
+        <div class="absolute inset-0 bg-[url('https://tailwindcss.com/_next/static/media/hero-dark.9a75e138.png')] opacity-20 z-0 pointer-events-none"></div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-6 pb-20">
-<div class="bg-white p-8 rounded-xl shadow-sm prose prose-slate max-w-none prose-img:rounded-xl"><h2>🔒 네트워크 1계층/2계층 보안 관련 명령어</h2>
+    <!-- 메인 콘텐츠 영역: 리스트 크기 축소 및 컴팩트한 디자인 적용 -->
+    <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+
+                <div class="bg-slate-900/80 p-8 rounded-2xl shadow-xl border border-slate-800 backdrop-blur-sm prose prose-invert prose-slate max-w-none prose-img:rounded-xl prose-a:text-cyan-400 hover:prose-a:text-cyan-300 prose-headings:text-slate-100">
+                    <h2>🔒 네트워크 1계층/2계층 보안 관련 명령어</h2>
 <p>시스템 관리자가 네트워크의 가장 기본적인 계층인 <strong>1계층(물리 계층)</strong>과 <strong>2계층(데이터 링크 계층)</strong>에서 보안 문제를 점검하고 대응하기 위해 알아야 할 핵심 명령어들을 정리했습니다.</p>
 <p>이 계층의 보안은 주로 <strong>ARP Spoofing</strong> 방지, <strong>MAC 주소 관리</strong>, 그리고 <strong>물리적 접근 통제</strong>에 중점을 둡니다.</p>
 <hr />
@@ -143,10 +182,13 @@
 </tbody>
 </table>
 <p>ARP 스푸핑과 스위치 포트 보안은 2계층에서 발생하는 가장 흔하면서도 치명적인 위협이므로, <code>arp -s</code>를 통한 정적 매핑 관리와 스위치의 <code>port-security</code> 설정은 시스템 관리자에게 필수적인 작업입니다.</p>
-<p>이 중에서 스위치의 <strong>포트 보안</strong> 명령어들을 이용한 실습 구성 예제를 다뤄볼까요?</p></div>
+<p>이 중에서 스위치의 <strong>포트 보안</strong> 명령어들을 이용한 실습 구성 예제를 다뤄볼까요?</p>
+                </div>
+                
     </main>
-    <footer class="border-t border-slate-200 py-10 text-center text-slate-500 text-sm">
-        <p>&copy; 2026 Putto's Lectures. 모든 권리 보유.</p>
+    <!-- 푸터: 다크 테마 적용 -->
+    <footer class="border-t border-slate-800/50 py-8 text-center text-slate-500 text-sm bg-slate-950">
+        <p class="font-mono">&copy; 2026 Security & Cloud Hacking Lab. All rights reserved. <span class="text-cyan-900">| Access Secured.</span></p>
     </footer>
 </body>
 </html>
