@@ -7,28 +7,28 @@ def generate_index():
     exclude_dirs = {'.git', '.github', '.pytest_cache', '__pycache__', 'assets'}
     exclude_files = {'index.html', 'generate_index.py', 'genindex.py', 'README.md'}
     
-    # 디자인 테마 변경: 해킹 및 클라우드 보안 분위기의 어두운 테마 적용
+    # 디자인 테마 변경: 가시성을 높인 어두운 테마 및 저자(Putto) 강조 디자인 적용
     html_header = f"""<!DOCTYPE html>
 <html lang="ko" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security & Cloud Hacking Lab</title>
-    <!-- Tailwind CSS 및 Typography 플러그인 로드 -->
+    <!-- Tailwind CSS (테일윈드 씨에스에스) 및 Typography (타이포그래피) 플러그인 로드 -->
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <!-- Font Awesome 아이콘 로드 -->
+    <!-- Font Awesome (폰트 어썸) 아이콘 로드 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Web Fonts (Noto Sans KR) 로드 -->
+    <!-- Google Web Fonts (구글 웹 폰트) 로드 -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
         
         /* 기본 글꼴 및 다크 모드 배경색 설정 */
         body {{ 
             font-family: 'Noto Sans KR', sans-serif; 
-            background-color: #020617; /* 매우 어두운 남색 배경 */
-            color: #e2e8f0; /* 밝은 회색 텍스트 */
-            /* 전체 화면 배경 이미지 적용 및 투명도(Overlay) 설정: 사진이 잘 보이도록 투명도 낮춤 */
-            background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.4), rgba(2, 6, 23, 0.75)), 
+            background-color: #020617; 
+            color: #f8fafc; 
+            /* 전체 화면 배경 이미지 적용 및 투명도(Overlay) 설정: 텍스트 가시성을 위해 어두운 오버레이 강화 */
+            background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.75), rgba(2, 6, 23, 0.95)), 
                               url('image_1a3201.jpg');
             background-size: cover;
             background-attachment: fixed;
@@ -40,12 +40,21 @@ def generate_index():
             transition: all 0.2s ease;
         }}
         .list-hover:hover {{
-            color: #22d3ee; /* 호버 시 사이안(Cyan) 색상 강조 */
-            padding-left: 0.5rem; /* 호버 시 살짝 우측으로 이동 */
-            background-color: rgba(15, 23, 42, 0.6); /* 어두운 반투명 배경 */
+            color: #22d3ee; 
+            padding-left: 0.75rem; 
+            background-color: rgba(15, 23, 42, 0.8); 
+            border-left-color: #0ea5e9;
+        }}
+
+        /* 텍스트 가시성을 높이는 그림자 효과 클래스 */
+        .text-glow {{
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }}
+        .neon-glow {{
+            text-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
         }}
     </style>
-    <!-- Tailwind 설정 커스터마이징 (다크 모드 활성화) -->
+    <!-- Tailwind (테일윈드) 설정 커스터마이징 -->
     <script>
         tailwind.config = {{
             darkMode: 'class',
@@ -53,46 +62,52 @@ def generate_index():
     </script>
 </head>
 <body class="min-h-screen flex flex-col">
-    <!-- 헤더 섹션: 배경 이미지를 body로 옮기고 hero-security 클래스 제거 -->
-    <header class="text-white py-20 px-6 relative overflow-hidden">
+    <!-- 헤더 섹션 -->
+    <header class="py-24 px-6 relative overflow-hidden">
         
-        <!-- 좌측 상단 브랜드 로고: Putto's Lectures -->
-        <div class="absolute top-6 left-6 md:left-10 flex items-center space-x-3 z-20">
-            <i class="fas fa-terminal text-cyan-400 text-xl"></i>
-            <span class="font-bold text-slate-100 tracking-widest font-mono text-sm md:text-base">PUTTO'S LECTURES</span>
+        <!-- 좌측 상단 브랜드 로고: 강사/저자 Putto 디자인 강화 (터미널 뱃지 스타일) -->
+        <div class="absolute top-6 left-6 md:left-10 z-20 group cursor-default">
+            <div class="flex items-center space-x-2 bg-slate-900/80 py-2 px-4 rounded-xl border border-cyan-900/50 backdrop-blur-md shadow-[0_0_15px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+                <!-- 활성화 상태를 나타내는 깜빡이는 신호(Ping) 효과 -->
+                <div class="relative flex h-3 w-3 mr-1">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                </div>
+                <span class="font-mono text-[10px] md:text-xs text-slate-400 tracking-wider">CHIEF ARCHITECT <span class="text-cyan-500 ml-1">❯</span></span>
+                <span class="font-black text-cyan-300 tracking-widest font-mono text-sm md:text-base neon-glow ml-1">PUTTO</span>
+                <span class="font-bold text-slate-200 tracking-widest font-mono text-sm md:text-base">'S LECTURES</span>
+            </div>
         </div>
 
-        <div class="max-w-4xl mx-auto relative z-10 text-center mt-4">
-            <div class="inline-flex items-center justify-center space-x-3 mb-6 bg-slate-900/50 p-3 rounded-2xl backdrop-blur-sm border border-slate-700">
-                <!-- 아이콘 변경: 방패(보안) 및 터미널(해킹) 아이콘 사용 -->
-                <i class="fas fa-user-secret text-4xl text-cyan-400"></i>
-                <span class="text-slate-400">|</span>
-                <i class="fas fa-shield-halved text-4xl text-blue-500"></i>
+        <div class="max-w-4xl mx-auto relative z-10 text-center mt-8">
+            <div class="inline-flex items-center justify-center space-x-3 mb-8 bg-slate-950/60 p-4 rounded-2xl backdrop-blur-md border border-slate-700/80 shadow-2xl">
+                <!-- 방패(보안) 및 터미널(해킹) 아이콘 -->
+                <i class="fas fa-user-secret text-4xl text-cyan-400 drop-shadow-lg"></i>
+                <span class="text-slate-500">|</span>
+                <i class="fas fa-shield-halved text-4xl text-blue-500 drop-shadow-lg"></i>
             </div>
             
-            <!-- 타이틀 텍스트: bg-clip-text 사용 시 꼬리가 잘리지 않도록 pb-2 추가 -->
-            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2 pb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+            <!-- 타이틀 텍스트: 그라데이션 및 강한 텍스트 그림자(Drop Shadow) 적용으로 배경과 분리 -->
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-2 pb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">
                 Cloud Security & Hacking Lab
             </h1>
             
-            <!-- 한글 서브 타이틀: 위 타이틀과 간격을 띄우기 위해 mt-6 추가 및 텍스트 밝기 상향 -->
-            <p class="mt-6 text-slate-200 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            <!-- 한글 서브 타이틀: 폰트 두께 상향 및 밝기 조정 -->
+            <p class="mt-8 text-slate-100 font-medium text-lg md:text-xl max-w-2xl mx-auto leading-relaxed text-glow">
                 실전 클라우드 인프라 보안 및 모의 해킹 시나리오 연구 자료 저장소
             </p>
         </div>
-        <!-- 배경 장식용 희미한 그리드 패턴 -->
-        <div class="absolute inset-0 bg-[url('https://tailwindcss.com/_next/static/media/hero-dark.9a75e138.png')] opacity-20 z-0 pointer-events-none"></div>
     </header>
 
-    <!-- 메인 콘텐츠 영역: 리스트 크기 축소 및 컴팩트한 디자인 적용 -->
-    <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="flex-grow max-w-4xl mx-auto px-6 py-8 w-full">
 """
 
     html_footer = """
     </main>
-    <!-- 푸터: 다크 테마 적용 -->
-    <footer class="border-t border-slate-800/50 py-8 text-center text-slate-500 text-sm bg-slate-950/80 backdrop-blur-sm">
-        <p class="font-mono">&copy; 2026 Putto's Lectures. All rights reserved. <span class="text-cyan-900">| Access Secured.</span></p>
+    <!-- 푸터 -->
+    <footer class="border-t border-slate-800/80 py-8 text-center text-slate-400 text-sm bg-slate-950/90 backdrop-blur-md mt-auto">
+        <p class="font-mono">&copy; 2026 Putto's Lectures. All rights reserved. <span class="text-cyan-800 font-bold ml-2">| ACCESS SECURED.</span></p>
     </footer>
 </body>
 </html>
@@ -118,9 +133,9 @@ def generate_index():
                 # 마크다운 변환
                 md_html = markdown.markdown(md_text, extensions=['fenced_code', 'tables'])
 
-                # 개별 문서 디자인 변경: 다크 모드 문서 스타일(prose-invert) 적용 및 컨테이너 배경색 어둡게 변경
+                # 개별 문서 디자인: 가독성을 위해 문서 컨테이너 배경을 더 짙게 처리
                 doc_content = f'''
-                <div class="bg-slate-900/80 p-8 rounded-2xl shadow-xl border border-slate-800 backdrop-blur-sm prose prose-invert prose-slate max-w-none prose-img:rounded-xl prose-a:text-cyan-400 hover:prose-a:text-cyan-300 prose-headings:text-slate-100">
+                <div class="bg-slate-950/90 p-8 md:p-12 rounded-2xl shadow-2xl border border-slate-700/50 backdrop-blur-xl prose prose-invert prose-slate max-w-none prose-img:rounded-xl prose-a:text-cyan-400 hover:prose-a:text-cyan-300 prose-headings:text-slate-100 prose-strong:text-cyan-100">
                     {md_html}
                 </div>
                 '''
@@ -147,31 +162,29 @@ def generate_index():
         display_folder = "Root Directory" if folder == "." else folder
         folder_icon = "fa-folder-tree" if folder != "." else "fa-server"
         
-        # 섹션 헤더 크기 축소 및 스타일 변경
         content_body += f"""
-        <section class="mb-8">
-            <div class="flex items-center space-x-3 mb-4 border-b border-slate-800/80 pb-2">
-                <i class="fas {folder_icon} text-cyan-600 text-lg"></i>
-                <h2 class="text-lg font-bold text-slate-300">{display_folder}</h2>
-                <span class="text-slate-500 text-xs font-mono ml-2">[{len(files)} objects]</span>
+        <section class="mb-10 bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80 backdrop-blur-sm shadow-xl">
+            <div class="flex items-center space-x-3 mb-4 border-b border-slate-700/80 pb-3">
+                <i class="fas {folder_icon} text-cyan-500 text-xl drop-shadow-md"></i>
+                <h2 class="text-xl font-bold text-slate-100 tracking-wide text-glow">{display_folder}</h2>
+                <span class="text-cyan-600/80 text-xs font-mono ml-2 font-bold">[{len(files)} OBJECTS]</span>
             </div>
-            <!-- 박스 형태 제거: 단순하고 세련된 텍스트 리스트 형태로 변경 -->
-            <ul class="space-y-1 font-mono text-sm">
+            
+            <ul class="space-y-2 font-mono text-sm md:text-base">
         """
         
-        # 파일 목록 디자인 변경: 박스 제거 및 터미널 라인 스타일 적용
         for file in files:
             file_path = os.path.join(folder, file) if folder != "." else file
             display_name = file.replace('.html', '').replace('_', ' ').replace('-', ' ')
             
             content_body += f"""
                 <li>
-                    <a href="{file_path}" target="_blank" class="list-hover flex items-center py-2 px-3 rounded border-l-2 border-transparent hover:border-cyan-500 group">
-                        <span class="text-slate-600 mr-3 group-hover:text-cyan-400 transition-colors">
+                    <a href="{file_path}" target="_blank" class="list-hover flex items-center py-3 px-4 rounded-lg border-l-4 border-transparent bg-slate-950/40 group">
+                        <span class="text-slate-500 mr-4 group-hover:text-cyan-400 transition-colors">
                             <i class="fas fa-chevron-right text-xs"></i>
                         </span>
-                        <span class="text-slate-300 group-hover:text-cyan-300 transition-colors">{display_name}</span>
-                        <span class="ml-auto text-slate-600 text-xs opacity-0 group-hover:opacity-100 transition-opacity">/{file}</span>
+                        <span class="text-slate-200 font-medium group-hover:text-cyan-300 transition-colors drop-shadow-sm">{display_name}</span>
+                        <span class="ml-auto text-slate-600 text-xs opacity-0 group-hover:opacity-100 transition-opacity tracking-widest">/{file}</span>
                     </a>
                 </li>
             """
