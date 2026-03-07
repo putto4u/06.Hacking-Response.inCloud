@@ -1,0 +1,137 @@
+---
+layout: default
+title: "Cloud SecOps & Threat Intelligence Dashboard"
+---
+
+<style>
+  :root {
+    --bg-color: #0a0a0a;
+    --text-primary: #00ff00;
+    --text-secondary: #008800;
+    --border-color: #333;
+    --hover-bg: #111;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .terminal-container {
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+    background: #050505;
+  }
+
+  .terminal-header {
+    background: var(--border-color);
+    color: #fff;
+    padding: 10px;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .terminal-body {
+    padding: 30px;
+  }
+
+  .sys-status {
+    border-bottom: 1px dashed var(--text-secondary);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+  }
+
+  .blink-cursor {
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .post-item {
+    border-left: 3px solid var(--text-secondary);
+    padding: 15px;
+    margin-bottom: 15px;
+    background: transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .post-item:hover {
+    background: var(--hover-bg);
+    border-left: 3px solid var(--text-primary);
+    transform: translateX(5px);
+  }
+
+  .post-meta {
+    font-size: 0.8em;
+    color: var(--text-secondary);
+  }
+
+  .post-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .post-title:hover {
+    text-decoration: underline;
+  }
+
+  .badge-category {
+    background: #222;
+    color: #00ff00;
+    padding: 3px 8px;
+    border: 1px solid #00ff00;
+    border-radius: 3px;
+    font-size: 0.7em;
+    text-transform: uppercase;
+  }
+</style>
+
+<div class="terminal-container">
+  <div class="terminal-header">
+    <span>root@sec-ops-center:~#</span>
+    <span>STATUS: SECURE_CONNECTION</span>
+  </div>
+  
+  <div class="terminal-body">
+    <div class="sys-status">
+      <h2>> INITIATING SYSTEM LOGS... <span class="blink-cursor">_</span></h2>
+      <p>[OK] Threat Intelligence Database Connected.</p>
+      <p>[OK] Fetching Latest Vulnerability Reports...</p>
+    </div>
+
+    <ul class="post-list">
+      {% for post in site.posts %}
+      <li class="post-item">
+        <div>
+          <div class="post-meta">
+            <span>[ {{ post.date | date: "%Y-%m-%d %H:%M:%S" }} ]</span>
+          </div>
+          <a class="post-title" href="{{ post.url | relative_url }}">> {{ post.title | escape }}</a>
+        </div>
+        <div>
+          {% if post.categories.size > 0 %}
+            <span class="badge-category">{{ post.categories | first }}</span>
+          {% else %}
+            <span class="badge-category">UNCATEGORIZED</span>
+          {% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
