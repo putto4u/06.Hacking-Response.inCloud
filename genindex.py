@@ -9,6 +9,8 @@ def generate_index():
     # ---------------------------------------------------------------------------
     # [1] 마크다운 변환 문서용 기본 HTML(HyperText Markup Language, 웹페이지 구조 언어) 헤더/푸터
     # ---------------------------------------------------------------------------
+    # 변경 사항: 뷰 화면이 전체 화면으로 확장됨에 따라, 좌측 상단의 떠있는(Floating) 저자 박스와 
+    # 본문 텍스트가 겹치지 않도록 상단 여백(pt-24, md:pt-28)을 추가하고 가독성을 위해 중앙 정렬(max-w-5xl mx-auto)을 적용했습니다.
     doc_html_header = """<!DOCTYPE html>
 <html lang="ko" class="dark">
 <head>
@@ -31,13 +33,14 @@ def generate_index():
     </style>
     <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
-<body class="p-6 md:p-10">
+<body class="p-6 pt-24 md:p-10 md:pt-28 max-w-5xl mx-auto">
 """
     doc_html_footer = "</body></html>"
 
     # ---------------------------------------------------------------------------
-    # [2] 동적 생성 목차(TOC) 전용 HTML 헤더 (기존 좌측 사이드바 디자인 차용)
+    # [2] 동적 생성 TOC(Table of Contents, 목차) 전용 HTML 헤더
     # ---------------------------------------------------------------------------
+    # 변경 사항: 목차 화면 역시 저자 박스와의 간섭을 피하기 위해 상단 여백(pt-24, md:pt-28)을 확보했습니다.
     toc_html_header = """<!DOCTYPE html>
 <html lang="ko" class="dark">
 <head>
@@ -65,7 +68,7 @@ def generate_index():
     </style>
     <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
-<body class="p-6 md:p-12">
+<body class="p-6 pt-24 md:p-12 md:pt-28">
     <div class="max-w-4xl mx-auto">
         <div class="flex justify-between items-center mb-8 border-b border-slate-700/80 pb-4">
             <h1 class="text-3xl font-black text-slate-100 tracking-wide">
@@ -145,6 +148,8 @@ def generate_index():
     # ---------------------------------------------------------------------------
     # [3] 단일 화면 레이아웃 (Iframe을 전체 영역으로 확장) 메인 HTML 헤더/푸터
     # ---------------------------------------------------------------------------
+    # 변경 사항: 불필요한 전체 타이틀과 푸터를 제거하고, Iframe(Inline Frame, 웹 페이지 안에 다른 웹 페이지를 삽입하는 HTML 요소)이 
+    # 브라우저의 전체 화면(100vw, 100vh)을 덮도록 수정했습니다. 저자 박스만 최상단(z-50)에 고정되어 목차 복귀 버튼 역할을 수행합니다.
     index_html = f"""<!DOCTYPE html>
 <html lang="ko" class="dark">
 <head>
@@ -158,13 +163,14 @@ def generate_index():
         body {{ 
             font-family: 'Noto Sans KR', sans-serif; 
             background-color: #020617; 
-            color: #f8fafc; 
             background-image: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.98)), 
                               url('image_1a3201.jpg');
             background-size: cover;
             background-attachment: fixed;
             background-position: center center;
+            margin: 0; padding: 0;
             height: 100vh;
+            width: 100vw;
             overflow: hidden; 
         }}
         .text-glow {{ text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8); }}
@@ -172,39 +178,22 @@ def generate_index():
     </style>
     <script>tailwind.config = {{ darkMode: 'class' }}</script>
 </head>
-<body class="flex flex-col">
-    <header class="py-8 px-6 relative flex-shrink-0">
-        <a href="toc.html" target="content-frame" class="absolute top-6 left-6 md:left-10 z-20 group cursor-pointer block">
-            <div class="flex items-center space-x-2 bg-slate-900/80 py-2 px-4 rounded-xl border border-cyan-900/50 backdrop-blur-md shadow-[0_0_15px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-                <div class="relative flex h-3 w-3 mr-1">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
-                </div>
-                <span class="font-mono text-[10px] md:text-xs text-slate-400 tracking-wider">CHIEF SYSTEM ARCHITECT <span class="text-cyan-500 ml-1">❯</span></span>
-                <span class="font-black text-cyan-300 tracking-widest font-mono text-sm md:text-base neon-glow ml-1">PUTTO</span>
-                <span class="font-bold text-slate-200 tracking-widest font-mono text-sm md:text-base">'S LECTURES</span>
+<body class="relative">
+    <!-- 떠있는 저자 박스 (어디서든 목차로 복귀 가능) -->
+    <a href="toc.html" target="content-frame" class="absolute top-6 left-6 md:left-10 z-50 group cursor-pointer block">
+        <div class="flex items-center space-x-2 bg-slate-900/80 py-2 px-4 rounded-xl border border-cyan-900/50 backdrop-blur-md shadow-[0_0_15px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+            <div class="relative flex h-3 w-3 mr-1">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
             </div>
-        </a>
-
-        <div class="max-w-6xl mx-auto relative z-10 text-center mt-6">
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-2 pb-1 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">
-                Cloud Security & Hacking Lab
-            </h1>
-            <p class="text-slate-300 font-medium text-sm md:text-base max-w-2xl mx-auto text-glow">
-                실전 클라우드 인프라 보안 및 모의 해킹 시나리오 연구 자료 저장소
-            </p>
+            <span class="font-mono text-[10px] md:text-xs text-slate-400 tracking-wider">CHIEF SYSTEM ARCHITECT <span class="text-cyan-500 ml-1">❯</span></span>
+            <span class="font-black text-cyan-300 tracking-widest font-mono text-sm md:text-base neon-glow ml-1">PUTTO</span>
+            <span class="font-bold text-slate-200 tracking-widest font-mono text-sm md:text-base">'S LECTURES</span>
         </div>
-    </header>
+    </a>
 
-    <main class="flex-grow w-full max-w-screen-2xl mx-auto px-4 pb-6 flex min-h-0">
-        <section class="flex-grow flex flex-col bg-slate-950/90 rounded-2xl border border-slate-700/80 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-            <iframe name="content-frame" id="content-frame" class="w-full h-full border-none relative z-20 bg-transparent rounded-2xl" src="toc.html"></iframe>
-        </section>
-    </main>
-
-    <footer class="border-t border-slate-800/80 py-3 text-center text-slate-500 text-xs bg-slate-950/90 backdrop-blur-md flex-shrink-0">
-        <p class="font-mono">&copy; 2026 Putto's Lectures. <span class="text-cyan-800 font-bold ml-1">| ACCESS SECURED.</span></p>
-    </footer>
+    <!-- 전체 화면 Iframe (목차 및 개별 문서 출력 영역) -->
+    <iframe name="content-frame" id="content-frame" class="absolute inset-0 w-full h-full border-none z-10 bg-transparent" src="toc.html"></iframe>
 </body>
 </html>
 """
@@ -279,7 +268,7 @@ def generate_index():
             file_path = os.path.join(folder, file) if not is_root else file
             display_name = file.replace('.html', '').replace('_', ' ').replace('-', ' ')
             
-            # target 속성 제거: Iframe 내부에서 자기 자신을 변경하여 문서 이동 처리
+            # target 속성 유지 필요 사항: 저자 박스 클릭 시 목차로 돌아가야 하므로 동일 프레임 타겟을 유지합니다.
             toc_body += f"""
                         <li>
                             <a href="{file_path}" class="list-hover flex items-center py-3 px-5 border-l-2 border-transparent group text-sm">
@@ -306,7 +295,7 @@ def generate_index():
     with open('toc.html', 'w', encoding='utf-8') as f:
         f.write(full_toc_html)
     
-    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Left navigation removed, UI transformed to full-width Iframe & styled TOC generated.")
+    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Main title removed, viewport expanded to full screen, keeping author box as a floating TOC return button.")
 
 if __name__ == "__main__":
     generate_index()
