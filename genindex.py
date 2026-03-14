@@ -14,11 +14,8 @@ def generate_index():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security & Cloud Hacking Lab</title>
-    <!-- Tailwind CSS (테일윈드 씨에스에스) 및 Typography (타이포그래피) 플러그인 로드 -->
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <!-- Font Awesome (폰트 어썸) 아이콘 로드 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Web Fonts (구글 웹 폰트) 로드 -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
         
@@ -60,7 +57,6 @@ def generate_index():
         ::-webkit-scrollbar-thumb {{ background: #334155; border-radius: 4px; }}
         ::-webkit-scrollbar-thumb:hover {{ background: #0ea5e9; }}
     </style>
-    <!-- Tailwind (테일윈드) 설정 커스터마이징 -->
     <script>
         tailwind.config = {{
             darkMode: 'class',
@@ -68,13 +64,10 @@ def generate_index():
     </script>
 </head>
 <body class="min-h-screen flex flex-col">
-    <!-- 헤더 섹션 -->
     <header class="py-24 px-6 relative overflow-hidden">
         
-        <!-- 좌측 상단 브랜드 로고: 강사/저자 Putto 디자인 강화 (터미널 뱃지 스타일) -->
-        <div class="absolute top-6 left-6 md:left-10 z-20 group cursor-default">
+        <a href="https://putto4u.github.io/06.Hacking-Response.inCloud/" class="absolute top-6 left-6 md:left-10 z-20 group cursor-pointer block" target="_blank" rel="noopener noreferrer">
             <div class="flex items-center space-x-2 bg-slate-900/80 py-2 px-4 rounded-xl border border-cyan-900/50 backdrop-blur-md shadow-[0_0_15px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-                <!-- 활성화 상태를 나타내는 깜빡이는 신호(Ping) 효과 -->
                 <div class="relative flex h-3 w-3 mr-1">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
@@ -83,40 +76,34 @@ def generate_index():
                 <span class="font-black text-cyan-300 tracking-widest font-mono text-sm md:text-base neon-glow ml-1">PUTTO</span>
                 <span class="font-bold text-slate-200 tracking-widest font-mono text-sm md:text-base">'S LECTURES</span>
             </div>
-        </div>
+        </a>
 
         <div class="max-w-4xl mx-auto relative z-10 text-center mt-8">
             <div class="inline-flex items-center justify-center space-x-3 mb-8 bg-slate-950/60 p-4 rounded-2xl backdrop-blur-md border border-slate-700/80 shadow-2xl">
-                <!-- 방패(보안) 및 터미널(해킹) 아이콘 -->
                 <i class="fas fa-user-secret text-4xl text-cyan-400 drop-shadow-lg"></i>
                 <span class="text-slate-500">|</span>
                 <i class="fas fa-shield-halved text-4xl text-blue-500 drop-shadow-lg"></i>
             </div>
             
-            <!-- 타이틀 텍스트: 그라데이션 및 강한 텍스트 그림자(Drop Shadow) 적용으로 배경과 분리 -->
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-2 pb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">
                 Cloud Security & Hacking Lab
             </h1>
             
-            <!-- 한글 서브 타이틀: 폰트 두께 상향 및 밝기 조정 -->
             <p class="mt-8 text-slate-100 font-medium text-lg md:text-xl max-w-2xl mx-auto leading-relaxed text-glow">
                 실전 클라우드 인프라 보안 및 모의 해킹 시나리오 연구 자료 저장소
             </p>
         </div>
     </header>
 
-    <!-- 메인 콘텐츠 영역 -->
     <main class="flex-grow max-w-4xl mx-auto px-6 py-8 w-full">
 """
 
     html_footer = """
     </main>
-    <!-- 푸터 -->
     <footer class="border-t border-slate-800/80 py-8 text-center text-slate-400 text-sm bg-slate-950/90 backdrop-blur-md mt-auto">
         <p class="font-mono">&copy; 2026 Putto's Lectures. All rights reserved. <span class="text-cyan-800 font-bold ml-2">| ACCESS SECURED.</span></p>
     </footer>
 
-    <!-- JS(JavaScript, 자바스크립트): 폴더 토글(Toggle, 상태 반전) 애니메이션 및 전역 제어 로직 -->
     <script>
         // 전역 상태 변수: 모든 폴더가 펼쳐져 있는지 여부를 추적합니다.
         let isAllExpanded = true;
@@ -270,7 +257,6 @@ def generate_index():
         # 각 폴더 섹션(Section) 컨테이너 및 헤더 구성
         content_body += f"""
         <section class="folder-section mb-10 bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80 backdrop-blur-sm shadow-xl transition-all duration-300">
-            <!-- 클릭 이벤트를 감지하여 토글 함수를 호출하는 영역 -->
             <div class="folder-header flex items-center space-x-3 mb-4 border-b border-slate-700/80 pb-3 cursor-pointer group hover:border-cyan-500/50 transition-colors" 
                  onclick="toggleFolder(this)" 
                  data-base-icon="{base_icon}" 
@@ -278,11 +264,9 @@ def generate_index():
                 <i class="folder-icon fas {base_icon} text-cyan-500 text-xl drop-shadow-md transition-all duration-300 group-hover:scale-110"></i>
                 <h2 class="text-xl font-bold text-slate-100 tracking-wide text-glow group-hover:text-cyan-300 transition-colors">{display_folder}</h2>
                 <span class="text-cyan-600/80 text-xs font-mono ml-2 font-bold bg-slate-950/50 px-2 py-1 rounded-md">[{len(files)} OBJECTS]</span>
-                <!-- 상태를 시각적으로 보여주는 우측 화살표(Chevron) -->
                 <i class="fas fa-chevron-up ml-auto text-slate-500 transition-transform duration-300 chevron-icon group-hover:text-cyan-400"></i>
             </div>
             
-            <!-- CSS Grid(Cascading Style Sheets Grid, 종속형 시트 그리드) 애니메이션을 활용한 부드러운 토글 컨테이너 -->
             <div class="list-container grid transition-all duration-300 ease-in-out grid-rows-[1fr] opacity-100">
                 <div class="overflow-hidden">
                     <ul class="space-y-2 font-mono text-sm md:text-base pt-2">
