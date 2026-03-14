@@ -53,6 +53,12 @@ def generate_index():
         .neon-glow {{
             text-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
         }}
+        
+        /* 커스텀 스크롤바 (선택적 시각 강화) */
+        ::-webkit-scrollbar {{ width: 8px; }}
+        ::-webkit-scrollbar-track {{ background: #0f172a; }}
+        ::-webkit-scrollbar-thumb {{ background: #334155; border-radius: 4px; }}
+        ::-webkit-scrollbar-thumb:hover {{ background: #0ea5e9; }}
     </style>
     <!-- Tailwind (테일윈드) 설정 커스터마이징 -->
     <script>
@@ -109,6 +115,89 @@ def generate_index():
     <footer class="border-t border-slate-800/80 py-8 text-center text-slate-400 text-sm bg-slate-950/90 backdrop-blur-md mt-auto">
         <p class="font-mono">&copy; 2026 Putto's Lectures. All rights reserved. <span class="text-cyan-800 font-bold ml-2">| ACCESS SECURED.</span></p>
     </footer>
+
+    <!-- 자바스크립트(JavaScript): 폴더 토글 애니메이션 및 전역 제어 로직 -->
+    <script>
+        // 전역 상태 변수: 모든 폴더가 펼쳐져 있는지 여부를 추적합니다.
+        let isAllExpanded = true;
+
+        // 개별 폴더를 펼치거나 접는 함수
+        function toggleFolder(element) {
+            // 클릭된 헤더의 부모 섹션(Section) 및 내부 리스트 컨테이너(Container) 탐색
+            const section = element.closest('.folder-section');
+            const listContainer = section.querySelector('.list-container');
+            const folderIcon = element.querySelector('.folder-icon');
+            const chevronIcon = element.querySelector('.chevron-icon');
+            
+            // 데이터 속성(Data Attributes)에 저장된 아이콘 클래스명 불러오기
+            const baseIcon = element.getAttribute('data-base-icon');
+            const closedIcon = element.getAttribute('data-closed-icon');
+
+            // 현재 리스트가 펼쳐진 상태인지 확인 (CSS Grid 속성 기준)
+            const isExpanded = listContainer.classList.contains('grid-rows-[1fr]');
+
+            if (isExpanded) {
+                // 접기(Collapse) 액션 수행
+                listContainer.classList.remove('grid-rows-[1fr]', 'opacity-100');
+                listContainer.classList.add('grid-rows-[0fr]', 'opacity-0');
+                
+                // 우측 화살표 아이콘 회전
+                chevronIcon.classList.add('rotate-180');
+                
+                // 루트 디렉터리가 아닌 경우에만 폴더 아이콘 닫힘 상태로 변경
+                if (baseIcon !== 'fa-server') {
+                    folderIcon.classList.remove('fa-folder-open');
+                    folderIcon.classList.add('fa-folder');
+                }
+            } else {
+                // 펼치기(Expand) 액션 수행
+                listContainer.classList.remove('grid-rows-[0fr]', 'opacity-0');
+                listContainer.classList.add('grid-rows-[1fr]', 'opacity-100');
+                
+                // 우측 화살표 아이콘 원상 복구
+                chevronIcon.classList.remove('rotate-180');
+                
+                // 루트 디렉터리가 아닌 경우에만 폴더 아이콘 열림 상태로 변경
+                if (baseIcon !== 'fa-server') {
+                    folderIcon.classList.remove('fa-folder');
+                    folderIcon.classList.add('fa-folder-open');
+                }
+            }
+        }
+
+        // 전체 폴더를 일괄적으로 펼치거나 접는 함수
+        function toggleAllFolders() {
+            // 전역 상태 반전
+            isAllExpanded = !isAllExpanded;
+            
+            // DOM(문서 객체 모델)에서 모든 폴더 헤더 요소 선택
+            const headers = document.querySelectorAll('.folder-header');
+            const globalBtnIcon = document.getElementById('global-toggle-icon');
+            const globalBtnText = document.getElementById('global-toggle-text');
+
+            headers.forEach(header => {
+                const section = header.closest('.folder-section');
+                const listContainer = section.querySelector('.list-container');
+                const isCurrentlyExpanded = listContainer.classList.contains('grid-rows-[1fr]');
+
+                // 현재 개별 폴더의 상태가 전역 상태 목표와 다를 경우에만 토글 함수 실행
+                if (isAllExpanded !== isCurrentlyExpanded) {
+                    toggleFolder(header);
+                }
+            });
+
+            // 전역 토글 버튼의 UI(사용자 인터페이스) 업데이트
+            if (isAllExpanded) {
+                globalBtnIcon.classList.remove('fa-folder');
+                globalBtnIcon.classList.add('fa-folder-open');
+                globalBtnText.innerText = 'COLLAPSE ALL';
+            } else {
+                globalBtnIcon.classList.remove('fa-folder-open');
+                globalBtnIcon.classList.add('fa-folder');
+                globalBtnText.innerText = 'EXPAND ALL';
+            }
+        }
+    </script>
 </body>
 </html>
 """
@@ -157,40 +246,68 @@ def generate_index():
     # ---------------------------------------------------------------------------
     # 3. 루트 인덱스 HTML 생성
     # ---------------------------------------------------------------------------
+    
+    # 전체 펼치기/접기(Expand/Collapse All) 전역 제어 버튼 영역 추가
+    if structure:
+        content_body += """
+        <div class="flex justify-end mb-6">
+            <button onclick="toggleAllFolders()" class="group flex items-center space-x-2 bg-slate-900/80 hover:bg-slate-800 text-cyan-400 py-2.5 px-5 rounded-xl border border-cyan-900/50 hover:border-cyan-500/50 transition-all duration-300 shadow-lg backdrop-blur-md">
+                <i class="fas fa-folder-open text-lg transition-transform group-hover:scale-110" id="global-toggle-icon"></i>
+                <span class="font-mono text-sm font-bold tracking-widest" id="global-toggle-text">COLLAPSE ALL</span>
+            </button>
+        </div>
+        """
+
     for folder in sorted(structure.keys()):
         files = structure[folder]
-        display_folder = "Root Directory" if folder == "." else folder
-        folder_icon = "fa-folder-tree" if folder != "." else "fa-server"
+        is_root = folder == "."
+        display_folder = "Root Directory" if is_root else folder
         
+        # 루트 디렉터리는 서버 아이콘 유지, 하위 폴더는 열린 폴더 아이콘으로 기본 설정
+        base_icon = "fa-server" if is_root else "fa-folder-open"
+        closed_icon = "fa-server" if is_root else "fa-folder"
+        
+        # 각 폴더 섹션(Section) 컨테이너 및 헤더 구성
         content_body += f"""
-        <section class="mb-10 bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80 backdrop-blur-sm shadow-xl">
-            <div class="flex items-center space-x-3 mb-4 border-b border-slate-700/80 pb-3">
-                <i class="fas {folder_icon} text-cyan-500 text-xl drop-shadow-md"></i>
-                <h2 class="text-xl font-bold text-slate-100 tracking-wide text-glow">{display_folder}</h2>
-                <span class="text-cyan-600/80 text-xs font-mono ml-2 font-bold">[{len(files)} OBJECTS]</span>
+        <section class="folder-section mb-10 bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80 backdrop-blur-sm shadow-xl transition-all duration-300">
+            <!-- 클릭 이벤트를 감지하여 토글 함수를 호출하는 영역 -->
+            <div class="folder-header flex items-center space-x-3 mb-4 border-b border-slate-700/80 pb-3 cursor-pointer group hover:border-cyan-500/50 transition-colors" 
+                 onclick="toggleFolder(this)" 
+                 data-base-icon="{base_icon}" 
+                 data-closed-icon="{closed_icon}">
+                <i class="folder-icon fas {base_icon} text-cyan-500 text-xl drop-shadow-md transition-all duration-300 group-hover:scale-110"></i>
+                <h2 class="text-xl font-bold text-slate-100 tracking-wide text-glow group-hover:text-cyan-300 transition-colors">{display_folder}</h2>
+                <span class="text-cyan-600/80 text-xs font-mono ml-2 font-bold bg-slate-950/50 px-2 py-1 rounded-md">[{len(files)} OBJECTS]</span>
+                <!-- 상태를 시각적으로 보여주는 우측 화살표(Chevron) -->
+                <i class="fas fa-chevron-up ml-auto text-slate-500 transition-transform duration-300 chevron-icon group-hover:text-cyan-400"></i>
             </div>
             
-            <ul class="space-y-2 font-mono text-sm md:text-base">
+            <!-- CSS Grid(씨에스에스 그리드) 애니메이션을 활용한 부드러운 토글 컨테이너 -->
+            <div class="list-container grid transition-all duration-300 ease-in-out grid-rows-[1fr] opacity-100">
+                <div class="overflow-hidden">
+                    <ul class="space-y-2 font-mono text-sm md:text-base pt-2">
         """
         
         for file in files:
-            file_path = os.path.join(folder, file) if folder != "." else file
+            file_path = os.path.join(folder, file) if not is_root else file
             display_name = file.replace('.html', '').replace('_', ' ').replace('-', ' ')
             
             content_body += f"""
-                <li>
-                    <a href="{file_path}" target="_blank" class="list-hover flex items-center py-3 px-4 rounded-lg border-l-4 border-transparent bg-slate-950/40 group">
-                        <span class="text-slate-500 mr-4 group-hover:text-cyan-400 transition-colors">
-                            <i class="fas fa-chevron-right text-xs"></i>
-                        </span>
-                        <span class="text-slate-200 font-medium group-hover:text-cyan-300 transition-colors drop-shadow-sm">{display_name}</span>
-                        <span class="ml-auto text-slate-600 text-xs opacity-0 group-hover:opacity-100 transition-opacity tracking-widest">/{file}</span>
-                    </a>
-                </li>
+                        <li>
+                            <a href="{file_path}" target="_blank" class="list-hover flex items-center py-3 px-4 rounded-lg border-l-4 border-transparent bg-slate-950/40 group">
+                                <span class="text-slate-500 mr-4 group-hover:text-cyan-400 transition-colors">
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </span>
+                                <span class="text-slate-200 font-medium group-hover:text-cyan-300 transition-colors drop-shadow-sm">{display_name}</span>
+                                <span class="ml-auto text-slate-600 text-xs opacity-0 group-hover:opacity-100 transition-opacity tracking-widest">/{file}</span>
+                            </a>
+                        </li>
             """
             
         content_body += """
-            </ul>
+                    </ul>
+                </div>
+            </div>
         </section>
         """
 
@@ -199,7 +316,7 @@ def generate_index():
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(full_html)
     
-    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Index generation complete. Security protocols active.")
+    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Index generation complete. Toggle UI & Security protocols active.")
 
 if __name__ == "__main__":
     generate_index()
