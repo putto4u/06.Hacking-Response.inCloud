@@ -185,7 +185,7 @@ def generate_index():
     <script>tailwind.config = {{ darkMode: 'class' }}</script>
 </head>
 <body class="relative">
-    <!-- 떠있는 저자 박스 (어디서든 목차로 복귀 가능) - 크기 축소 적용 -->
+    <!-- 떠있는 저자 박스 (어디서든 목차로 복귀 가능) - 오른쪽 끝으로 이동 적용 -->
     <a href="toc.html" target="content-frame" class="absolute top-5 right-5 md:top-6 md:right-8 z-50 group cursor-pointer block">
         <div class="flex items-center space-x-1.5 bg-slate-900/80 py-1.5 px-3 rounded-lg border border-cyan-900/50 backdrop-blur-md shadow-[0_0_10px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.4)]">
             <div class="relative flex h-2 w-2 mr-0.5">
@@ -300,7 +300,7 @@ def generate_index():
     with open('toc.html', 'w', encoding='utf-8') as f:
         f.write(full_toc_html)
     
-    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Author box size reduced for better readability.")
+    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Author box repositioned to the right.")
 
 if __name__ == "__main__":
     generate_index()
