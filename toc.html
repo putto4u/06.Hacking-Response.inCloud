@@ -22,13 +22,25 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
+        .text-glow { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8); }
     </style>
     <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
 <body class="p-6 pt-24 md:p-12 md:pt-28">
+
+    <!-- 첫 화면(TOC) 전용 메인 타이틀 섹션 -->
+    <div class="max-w-6xl mx-auto text-center mb-10 md:mb-14">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-2 pb-1 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">
+            Cloud Security & Hacking Lab
+        </h1>
+        <p class="text-slate-300 font-medium text-sm md:text-base max-w-2xl mx-auto text-glow">
+            실전 클라우드 인프라 보안 및 모의 해킹 시나리오 연구 자료 저장소
+        </p>
+    </div>
+
     <div class="max-w-4xl mx-auto">
         <div class="flex justify-between items-center mb-8 border-b border-slate-700/80 pb-4">
-            <h1 class="text-3xl font-black text-slate-100 tracking-wide">
+            <h1 class="text-2xl md:text-3xl font-black text-slate-100 tracking-wide">
                 <i class="fas fa-network-wired text-cyan-500 mr-3"></i>DIRECTORY INDEX
             </h1>
             <button onclick="toggleAllFolders()" class="group flex items-center space-x-2 bg-slate-800/80 hover:bg-slate-700 text-cyan-400 py-2 px-4 rounded-lg border border-cyan-900/50 transition-all duration-300 shadow-md">
