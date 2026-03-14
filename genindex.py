@@ -31,15 +31,13 @@ def generate_index():
     </style>
     <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
-<body class="p-6 pt-24 md:p-10 md:pt-28 max-w-5xl mx-auto">
+<body class="p-6 pt-20 md:p-10 md:pt-24 max-w-5xl mx-auto">
 """
     doc_html_footer = "</body></html>"
 
     # ---------------------------------------------------------------------------
     # [2] 동적 생성 TOC(Table of Contents, 목차) 전용 HTML 헤더
     # ---------------------------------------------------------------------------
-    # 변경 사항: 목차 화면(첫 화면)에 메인 타이틀을 추가했습니다. 
-    # 상단 패딩(pt-24, md:pt-28)을 유지하여 좌측 상단의 부유하는(Floating) 저자 박스와 절대 겹치지 않도록 설계했습니다.
     toc_html_header = """<!DOCTYPE html>
 <html lang="ko" class="dark">
 <head>
@@ -68,7 +66,7 @@ def generate_index():
     </style>
     <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
-<body class="p-6 pt-24 md:p-12 md:pt-28">
+<body class="p-6 pt-20 md:p-12 md:pt-24">
 
     <!-- 첫 화면(TOC) 전용 메인 타이틀 섹션 -->
     <div class="max-w-6xl mx-auto text-center mb-10 md:mb-14">
@@ -187,16 +185,16 @@ def generate_index():
     <script>tailwind.config = {{ darkMode: 'class' }}</script>
 </head>
 <body class="relative">
-    <!-- 떠있는 저자 박스 (어디서든 목차로 복귀 가능) -->
-    <a href="toc.html" target="content-frame" class="absolute top-6 left-6 md:left-10 z-50 group cursor-pointer block">
-        <div class="flex items-center space-x-2 bg-slate-900/80 py-2 px-4 rounded-xl border border-cyan-900/50 backdrop-blur-md shadow-[0_0_15px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-            <div class="relative flex h-3 w-3 mr-1">
+    <!-- 떠있는 저자 박스 (어디서든 목차로 복귀 가능) - 크기 축소 적용 -->
+    <a href="toc.html" target="content-frame" class="absolute top-5 left-5 md:top-6 md:left-8 z-50 group cursor-pointer block">
+        <div class="flex items-center space-x-1.5 bg-slate-900/80 py-1.5 px-3 rounded-lg border border-cyan-900/50 backdrop-blur-md shadow-[0_0_10px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+            <div class="relative flex h-2 w-2 mr-0.5">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
             </div>
-            <span class="font-mono text-[10px] md:text-xs text-slate-400 tracking-wider">CHIEF SYSTEM ARCHITECT <span class="text-cyan-500 ml-1">❯</span></span>
-            <span class="font-black text-cyan-300 tracking-widest font-mono text-sm md:text-base neon-glow ml-1">PUTTO</span>
-            <span class="font-bold text-slate-200 tracking-widest font-mono text-sm md:text-base">'S LECTURES</span>
+            <span class="font-mono text-[8px] md:text-[10px] text-slate-400 tracking-wider">CHIEF SYSTEM ARCHITECT <span class="text-cyan-500 ml-0.5">❯</span></span>
+            <span class="font-black text-cyan-300 tracking-widest font-mono text-xs md:text-sm neon-glow ml-0.5">PUTTO</span>
+            <span class="font-bold text-slate-200 tracking-widest font-mono text-xs md:text-sm">'S LECTURES</span>
         </div>
     </a>
 
@@ -276,7 +274,6 @@ def generate_index():
             file_path = os.path.join(folder, file) if not is_root else file
             display_name = file.replace('.html', '').replace('_', ' ').replace('-', ' ')
             
-            # target 속성 유지 필요 사항: 저자 박스 클릭 시 목차로 돌아가야 하므로 동일 프레임 타겟을 유지합니다.
             toc_body += f"""
                         <li>
                             <a href="{file_path}" class="list-hover flex items-center py-3 px-5 border-l-2 border-transparent group text-sm">
@@ -303,7 +300,7 @@ def generate_index():
     with open('toc.html', 'w', encoding='utf-8') as f:
         f.write(full_toc_html)
     
-    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Main title moved to TOC view (first screen) with overlap prevention.")
+    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Author box size reduced for better readability.")
 
 if __name__ == "__main__":
     generate_index()
