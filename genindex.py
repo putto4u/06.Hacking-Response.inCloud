@@ -116,7 +116,7 @@ def generate_index():
         <p class="font-mono">&copy; 2026 Putto's Lectures. All rights reserved. <span class="text-cyan-800 font-bold ml-2">| ACCESS SECURED.</span></p>
     </footer>
 
-    <!-- 자바스크립트(JavaScript): 폴더 토글 애니메이션 및 전역 제어 로직 -->
+    <!-- JS(JavaScript, 자바스크립트): 폴더 토글(Toggle, 상태 반전) 애니메이션 및 전역 제어 로직 -->
     <script>
         // 전역 상태 변수: 모든 폴더가 펼쳐져 있는지 여부를 추적합니다.
         let isAllExpanded = true;
@@ -170,7 +170,7 @@ def generate_index():
             // 전역 상태 반전
             isAllExpanded = !isAllExpanded;
             
-            // DOM(문서 객체 모델)에서 모든 폴더 헤더 요소 선택
+            // DOM(Document Object Model, 문서 객체 모델)에서 모든 폴더 헤더 요소 선택
             const headers = document.querySelectorAll('.folder-header');
             const globalBtnIcon = document.getElementById('global-toggle-icon');
             const globalBtnText = document.getElementById('global-toggle-text');
@@ -186,7 +186,7 @@ def generate_index():
                 }
             });
 
-            // 전역 토글 버튼의 UI(사용자 인터페이스) 업데이트
+            // 전역 토글 버튼의 UI(User Interface, 사용자 인터페이스) 업데이트
             if (isAllExpanded) {
                 globalBtnIcon.classList.remove('fa-folder');
                 globalBtnIcon.classList.add('fa-folder-open');
@@ -282,7 +282,7 @@ def generate_index():
                 <i class="fas fa-chevron-up ml-auto text-slate-500 transition-transform duration-300 chevron-icon group-hover:text-cyan-400"></i>
             </div>
             
-            <!-- CSS Grid(씨에스에스 그리드) 애니메이션을 활용한 부드러운 토글 컨테이너 -->
+            <!-- CSS Grid(Cascading Style Sheets Grid, 종속형 시트 그리드) 애니메이션을 활용한 부드러운 토글 컨테이너 -->
             <div class="list-container grid transition-all duration-300 ease-in-out grid-rows-[1fr] opacity-100">
                 <div class="overflow-hidden">
                     <ul class="space-y-2 font-mono text-sm md:text-base pt-2">
