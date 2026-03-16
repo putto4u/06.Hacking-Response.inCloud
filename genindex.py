@@ -1,6 +1,6 @@
 import os
 import markdown
-from datetime import datetime 
+from datetime import datetime
 
 def generate_index():
     exclude_dirs = {'.git', '.github', '.pytest_cache', '__pycache__', 'assets'}
@@ -37,7 +37,6 @@ def generate_index():
 
     # ---------------------------------------------------------------------------
     # [2] 동적 생성 TOC(Table of Contents, 목차) 전용 HTML 헤더
-    #     -> 초기 상태: EXPAND ALL 버튼으로 설정
     # ---------------------------------------------------------------------------
     toc_html_header = """<!DOCTYPE html>
 <html lang="ko" class="dark">
@@ -84,9 +83,9 @@ def generate_index():
             <h1 class="text-2xl md:text-3xl font-black text-slate-100 tracking-wide">
                 <i class="fas fa-network-wired text-cyan-500 mr-3"></i>DIRECTORY INDEX
             </h1>
-            <!-- 초기 상태를 모든 폴더가 닫혀있다는 전제하에 EXPAND ALL로 설정 -->
+            <!-- 초기 상태가 닫혀있으므로 '펼치기(EXPAND ALL)' 액션을 유도하는 텍스트 및 열린 폴더 아이콘 적용 -->
             <button onclick="toggleAllFolders()" class="group flex items-center space-x-2 bg-slate-800/80 hover:bg-slate-700 text-cyan-400 py-2 px-4 rounded-lg border border-cyan-900/50 transition-all duration-300 shadow-md">
-                <i class="fas fa-folder" id="global-toggle-icon"></i>
+                <i class="fas fa-folder-open" id="global-toggle-icon"></i>
                 <span class="font-mono text-xs font-bold tracking-widest" id="global-toggle-text">EXPAND ALL</span>
             </button>
         </div>
@@ -95,7 +94,7 @@ def generate_index():
 
     # ---------------------------------------------------------------------------
     # JS(JavaScript, 자바스크립트) 제어 로직
-    # 초기 상태 변수 isAllExpanded를 false로 설정하여 로드 시점과 동기화
+    # 인라인 스타일(style="grid-template-rows") 기반 상태 판단 및 제어 적용
     # ---------------------------------------------------------------------------
     toc_html_footer = """
         </div>
@@ -111,20 +110,32 @@ def generate_index():
             const folderIcon = element.querySelector('.folder-icon');
             const chevronIcon = element.querySelector('.chevron-icon');
             const baseIcon = element.getAttribute('data-base-icon');
-            const isExpanded = listContainer.classList.contains('grid-rows-[1fr]');
+            
+            // CSS Grid 인라인 속성값을 직접 확인하여 Tailwind JIT 컴파일 오류 원천 회피
+            const isExpanded = listContainer.style.gridTemplateRows === '1fr';
 
             if (isExpanded) {
-                listContainer.classList.remove('grid-rows-[1fr]', 'opacity-100');
-                listContainer.classList.add('grid-rows-[0fr]', 'opacity-0');
-                chevronIcon.classList.add('rotate-180');
+                // 축소(Collapse) 상태로 전환
+                listContainer.style.gridTemplateRows = '0fr';
+                listContainer.classList.remove('opacity-100', 'border-slate-700/80');
+                listContainer.classList.add('opacity-0', 'border-transparent');
+                
+                chevronIcon.classList.remove('fa-chevron-up');
+                chevronIcon.classList.add('fa-chevron-down');
+                
                 if (baseIcon !== 'fa-server') {
                     folderIcon.classList.remove('fa-folder-open');
                     folderIcon.classList.add('fa-folder');
                 }
             } else {
-                listContainer.classList.remove('grid-rows-[0fr]', 'opacity-0');
-                listContainer.classList.add('grid-rows-[1fr]', 'opacity-100');
-                chevronIcon.classList.remove('rotate-180');
+                // 확장(Expand) 상태로 전환
+                listContainer.style.gridTemplateRows = '1fr';
+                listContainer.classList.remove('opacity-0', 'border-transparent');
+                listContainer.classList.add('opacity-100', 'border-slate-700/80');
+                
+                chevronIcon.classList.remove('fa-chevron-down');
+                chevronIcon.classList.add('fa-chevron-up');
+                
                 if (baseIcon !== 'fa-server') {
                     folderIcon.classList.remove('fa-folder');
                     folderIcon.classList.add('fa-folder-open');
@@ -141,19 +152,22 @@ def generate_index():
             headers.forEach(header => {
                 const section = header.closest('.folder-section');
                 const listContainer = section.querySelector('.list-container');
-                const isCurrentlyExpanded = listContainer.classList.contains('grid-rows-[1fr]');
+                const isCurrentlyExpanded = listContainer.style.gridTemplateRows === '1fr';
+                
                 if (isAllExpanded !== isCurrentlyExpanded) {
                     toggleFolder(header);
                 }
             });
 
             if (isAllExpanded) {
-                globalBtnIcon.classList.remove('fa-folder');
-                globalBtnIcon.classList.add('fa-folder-open');
-                globalBtnText.innerText = 'COLLAPSE ALL';
-            } else {
+                // 전체가 확장된 상태이므로, 버튼은 '모두 축소(COLLAPSE ALL)' 액션을 유도하도록 변경
                 globalBtnIcon.classList.remove('fa-folder-open');
                 globalBtnIcon.classList.add('fa-folder');
+                globalBtnText.innerText = 'COLLAPSE ALL';
+            } else {
+                // 전체가 축소된 상태이므로, 버튼은 '모두 확장(EXPAND ALL)' 액션을 유도하도록 변경
+                globalBtnIcon.classList.remove('fa-folder');
+                globalBtnIcon.classList.add('fa-folder-open');
                 globalBtnText.innerText = 'EXPAND ALL';
             }
         }
@@ -264,21 +278,20 @@ def generate_index():
         initial_folder_icon = "fa-server" if is_root else "fa-folder"
         
         # 목차 내 개별 폴더 섹션 구성 
-        # grid-rows-[0fr] 및 opacity-0을 기본값으로 할당하여 초기 접힘 상태 유지
-        # chevron-icon에 rotate-180 클래스를 기본으로 주어 방향 일치
+        # grid-template-rows: 0fr 인라인 스타일을 강제 삽입하여 초기 렌더링 시 완벽한 숨김 처리 보장
+        # 화살표 아이콘을 명시적인 fa-chevron-down 으로 설정
         toc_body += f"""
         <div class="folder-section bg-slate-900/60 rounded-xl border border-slate-700/80 shadow-lg transition-all duration-300">
             <div class="folder-header flex items-center p-4 cursor-pointer group hover:bg-slate-800/80 rounded-t-xl transition-colors" 
                  onclick="toggleFolder(this)" 
-                 data-base-icon="{base_icon}" 
-                 data-closed-icon="{closed_icon}">
+                 data-base-icon="{base_icon}">
                 <i class="folder-icon fas {initial_folder_icon} text-cyan-500 w-6 text-center text-lg transition-transform duration-300 group-hover:scale-110"></i>
                 <h2 class="text-base font-bold text-slate-200 ml-3 group-hover:text-cyan-300 tracking-wide">{display_folder}</h2>
                 <span class="text-cyan-600/80 text-[10px] font-mono ml-3 font-bold bg-slate-950/50 px-2 py-1 rounded-md">[{len(files)}]</span>
-                <i class="fas fa-chevron-up ml-auto text-slate-500 text-sm transition-transform duration-300 chevron-icon rotate-180"></i>
+                <i class="fas fa-chevron-down ml-auto text-slate-500 text-sm transition-transform duration-300 chevron-icon"></i>
             </div>
             
-            <div class="list-container grid transition-all duration-300 ease-in-out grid-rows-[0fr] opacity-0 border-t border-slate-700/80">
+            <div class="list-container grid transition-all duration-300 ease-in-out opacity-0 border-t border-transparent" style="grid-template-rows: 0fr;">
                 <div class="overflow-hidden bg-slate-950/40 rounded-b-xl">
                     <ul class="py-2">
         """
@@ -313,7 +326,7 @@ def generate_index():
     with open('toc.html', 'w', encoding='utf-8') as f:
         f.write(full_toc_html)
     
-    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Directory structure collapsed by default.")
+    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Inline styles enforced for robust collapsing.")
 
 if __name__ == "__main__":
     generate_index()
