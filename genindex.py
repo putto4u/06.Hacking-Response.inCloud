@@ -84,8 +84,8 @@ def generate_index():
                 <i class="fas fa-network-wired text-cyan-500 mr-3"></i>DIRECTORY INDEX
             </h1>
             <button onclick="toggleAllFolders()" class="group flex items-center space-x-2 bg-slate-800/80 hover:bg-slate-700 text-cyan-400 py-2 px-4 rounded-lg border border-cyan-900/50 transition-all duration-300 shadow-md">
-                <i class="fas fa-folder-open" id="global-toggle-icon"></i>
-                <span class="font-mono text-xs font-bold tracking-widest" id="global-toggle-text">COLLAPSE ALL</span>
+                <i class="fas fa-folder" id="global-toggle-icon"></i>
+                <span class="font-mono text-xs font-bold tracking-widest" id="global-toggle-text">Expand ALL</span>
             </button>
         </div>
         <div class="space-y-6">
