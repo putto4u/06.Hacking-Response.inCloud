@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모의 해킹(Penetration Testing) 입문 </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; color: #334155; line-height: 1.8; scroll-behavior: smooth; }
+        .content-wrapper { background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+        .text-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin: 20px 0; }
+        
+        /* Note Boxes */
+        .tech-note { background-color: #f1f5f9; border-radius: 12px; padding: 25px; margin-top: 15px; font-size: 0.95rem; border-left: 4px solid #94a3b8; }
+        .expert-tip { background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #22c55e; }
+        .warning-box { background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #ef4444; }
+        .aws-billing-box { background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #f59e0b; }
+        
+        .highlight { background-color: #fde047; padding: 2px 4px; border-radius: 4px; font-weight: 500; color: #1e293b; }
+        
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 20px 0; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+        th { background-color: #1e293b; color: white; padding: 16px; text-align: left; font-weight: 700; border-bottom: 2px solid #0f172a; }
+        td { padding: 16px; background-color: white; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #f8fafc; }
+        
+        .diagram-container { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px 20px; margin: 40px 0; display: flex; justify-content: center; align-items: center; flex-direction: column; overflow: hidden; }
+        .diagram-caption { margin-top: 24px; font-size: 1.05rem; color: #1e293b; font-weight: 700; text-align: center; }
+        
+        .module-badge { display: inline-flex; align-items: center; justify-content: center; background-color: #0f172a; color: white; padding: 6px 12px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; letter-spacing: 0.05em; }
+    </style>
+</head>
+<body class="max-w-6xl mx-auto p-6 md:p-12">
+
+    <div class="content-wrapper p-8 md:p-12">
+        <!-- Header Section -->
+        <div class="border-b-4 border-slate-900 pb-8 mb-12">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4">모의 해킹(Penetration Testing) 입문</h1>
+            <p class="text-lg text-slate-500">사이버 킬 체인(Cyber Kill Chain) 기반의 오펜시브 시큐리티(Offensive Security) 실무 로드맵 및 강의 계획표</p>
+        </div>
+
+        <!-- Course Overview -->
+        <div class="text-box mb-12">
+            <h3 class="font-bold text-xl text-slate-800 mb-4">주요 개요 (Course Overview)</h3>
+            <p class="text-slate-700 mb-4">
+                본 과정은 IT 인프라 및 네트워크 기초 지식을 보유한 입문자를 대상으로, 실제 해커의 관점과 기법을 사용하여 시스템의 취약점을 선제적으로 식별하고 방어 대책을 수립하는 <strong>모의 해킹(Penetration Testing, 펜테스팅)</strong>의 전체 라이프사이클을 학습합니다. 윤리적 해킹(Ethical Hacking)의 법적 테두리 안에서 <a href="https://www.kali.org/" target="_blank" class="text-blue-600 underline font-bold">칼리 리눅스(Kali Linux)</a> 플랫폼을 활용한 실습 위주로 진행됩니다.
+            </p>
+            <ul class="list-disc list-inside space-y-2 text-sm text-slate-600">
+                <li><strong>선수 지식:</strong> 리눅스 기본 명령어(CLI) 조작, TCP/IP 네트워크 기초 이해, 웹 서비스(HTTP) 기본 동작 원리</li>
+                <li><strong>학습 목표:</strong> 모의 해킹 5단계 방법론 습득, 주요 해킹 도구(Nmap, Burp Suite, Metasploit 등) 실무 활용 능력 배양, 취약점 진단 결과에 따른 보안 아키텍처 개선안 도출</li>
+            </ul>
+        </div>
+
+        <!-- Roadmap Diagram -->
+        <h2 class="text-2xl font-bold text-slate-800 mb-6 border-l-4 border-slate-800 pl-4">학습 로드맵 (Learning Roadmap)</h2>
+        <div class="diagram-container mb-16">
+            <svg width="850" height="150" viewBox="0 0 850 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Module 1 -->
+                <rect x="20" y="40" width="120" height="70" rx="8" fill="#1e293b"/>
+                <text x="80" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="13">M1. 기반 구축</text>
+                <text x="80" y="90" text-anchor="middle" fill="#94a3b8" font-size="10">환경설정 & 법규</text>
+
+                <path d="M 140 75 L 160 75" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <!-- Module 2 -->
+                <rect x="170" y="40" width="120" height="70" rx="8" fill="#3b82f6"/>
+                <text x="230" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="13">M2. 정보 수집</text>
+                <text x="230" y="90" text-anchor="middle" fill="#bfdbfe" font-size="10">OSINT 정찰</text>
+
+                <path d="M 290 75 L 310 75" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <!-- Module 3 -->
+                <rect x="320" y="40" width="120" height="70" rx="8" fill="#10b981"/>
+                <text x="380" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="13">M3. 스캐닝</text>
+                <text x="380" y="90" text-anchor="middle" fill="#a7f3d0" font-size="10">Nmap & 취약점</text>
+
+                <path d="M 440 75 L 460 75" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <!-- Module 4 -->
+                <rect x="470" y="40" width="120" height="70" rx="8" fill="#f59e0b"/>
+                <text x="530" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="13">M4. 웹 해킹</text>
+                <text x="530" y="90" text-anchor="middle" fill="#fde68a" font-size="10">Burp & 인젝션</text>
+
+                <path d="M 590 75 L 610 75" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+
+                <!-- Module 5 -->
+                <rect x="620" y="40" width="120" height="70" rx="8" fill="#ef4444"/>
+                <text x="680" y="70" text-anchor="middle" fill="white" font-weight="bold" font-size="13">M5. 시스템 침투</text>
+                <text x="680" y="90" text-anchor="middle" fill="#fecaca" font-size="10">Metasploit & RCE</text>
+                
+                <path d="M 740 75 L 750 75 L 750 120 L 80 120 L 80 110" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)" fill="none" stroke-dasharray="4 4"/>
+
+                <!-- Module 6 -->
+                <rect x="20" y="110" width="810" height="30" rx="4" fill="#64748b" opacity="0.1"/>
+                <text x="425" y="130" text-anchor="middle" fill="#475569" font-weight="bold" font-size="11">M6. 포스트 익스플로이테이션 (권한 상승/유지) 및 보안 보고서 작성</text>
+
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                    </marker>
+                </defs>
+            </svg>
+            <p class="diagram-caption">[도식 1] 모의 해킹 실무 표준 절차(PTES)에 맞춘 단계별 학습 흐름도</p>
+        </div>
+
+        <div class="warning-box">
+            <h4 class="font-bold text-red-700 mb-2">⚠️ 윤리적 해킹(Ethical Hacking) 서약 및 법적 책임 고지</h4>
+            <p class="text-sm text-slate-700">
+                본 과정에서 학습하는 모든 공격 기법은 정보통신망법 제48조(정보통신망 침해행위 등의 금지)에 저촉될 수 있는 파괴적인 기술을 포함하고 있습니다. 수강생은 반드시 <strong>자신이 구축한 격리된 가상 환경(VirtualBox/VMware)</strong> 또는 사전 서면 승인을 득한 대상에게만 기술을 적용해야 하며, 불법적인 스캐닝이나 침투 행위로 발생하는 모든 법적 책임은 수행자 본인에게 있음을 명확히 인지해야 합니다.
+            </p>
+        </div>
+
+        <!-- Weekly Syllabus Table -->
+        <h2 class="text-2xl font-bold text-slate-800 mb-6 border-l-4 border-slate-800 pl-4 mt-12">상세 강의 계획표 (Detailed Syllabus)</h2>
+        
+        <!-- Module 1 -->
+        <div class="mb-10">
+            <span class="module-badge">Module 1. 기반 구축 및 칼리 리눅스 마스터</span>
+            <table>
+                <colgroup>
+                    <col style="width: 20%;">
+                    <col style="width: 40%;">
+                    <col style="width: 40%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>주제 (Topic)</th>
+                        <th>주요 학습 내용 (Contents)</th>
+                        <th>실무 팁 및 주의사항 (Tips & Remarks)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold text-slate-800">보안 테스트 방법론</td>
+                        <td class="text-sm text-slate-700">
+                            - <strong>PTES(Penetration Testing Execution Standard, 모의 해킹 실행 표준)</strong> 7단계 이해<br>
+                            - 레드팀(Red Team)과 블루팀(Blue Team)의 관점 차이<br>
+                            - 법적 규제 및 모의 해킹 수행 계약서(RoE) 작성법
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            💡 침투 테스트 전 타겟 범위(Scope)를 명확히 정의하는 것이 실무에서 가장 중요함을 강조합니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">Kali Linux 아키텍처</td>
+                        <td class="text-sm text-slate-700">
+                            - 데비안(Debian) 기반 운영체제의 특징 및 롤링 릴리즈(Rolling Release) 정책<br>
+                            - 가상 머신(VM) 네트워크 설정: <strong>NAT(Network Address Translation, 네트워크 주소 변환)</strong> vs <strong>Host-Only(호스트 전용)</strong> 모드 차이
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            🚨 <strong>실수 방지:</strong> 취약점 실습 서버(Metasploitable)는 외부망 노출 방지를 위해 반드시 Host-Only로 설정해야 합니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">Linux CLI 핵심 조작</td>
+                        <td class="text-sm text-slate-700">
+                            - ZSH 셸 환경 및 패키지 관리(<code>apt</code>, Kali Tweaks)<br>
+                            - 디렉터리 권한 통제(<code>chmod</code>, <code>chown</code>)<br>
+                            - <strong>sudo(Superuser Do, 최고 관리자 권한 실행)</strong>의 원리와 보안적 의미
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            💡 <code>locate</code> 명령어를 통한 해킹 툴 검색 및 <code>-h</code> 옵션을 이용한 매뉴얼 정독 습관을 훈련합니다.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="mb-10">
+            <span class="module-badge">Module 2. 정보 수집 (Information Gathering)</span>
+            <table>
+                <colgroup>
+                    <col style="width: 20%;">
+                    <col style="width: 40%;">
+                    <col style="width: 40%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>주제 (Topic)</th>
+                        <th>주요 학습 내용 (Contents)</th>
+                        <th>실무 팁 및 주의사항 (Tips & Remarks)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold text-slate-800">수동적 정찰 (Passive Recon)</td>
+                        <td class="text-sm text-slate-700">
+                            - 타겟에 패킷을 보내지 않는 <strong>OSINT(Open Source Intelligence, 공개 출처 정보)</strong> 수집 기법<br>
+                            - <strong>Google Dorking(구글 도킹)</strong>을 이용한 민감 파일(PDF, 백업 파일) 노출 검색<br>
+                            - <a href="https://www.shodan.io/" target="_blank" class="text-blue-600 underline">Shodan(쇼단)</a> 검색 엔진을 활용한 인터넷 연결 자산 식별
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            💡 방화벽 로그에 남지 않으므로 공격 대상이 눈치채지 못하게 내부 인프라 지도를 그리는 핵심 단계입니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">네트워크 토폴로지 분석</td>
+                        <td class="text-sm text-slate-700">
+                            - DNS(Domain Name System, 도메인 이름 시스템) 쿼리 구조 이해 (A, MX, TXT 레코드)<br>
+                            - <code>nslookup</code>, <code>dig</code>, <code>dnsenum</code> 도구 실습<br>
+                            - WHOIS 정보를 통한 도메인 소유자 및 IP 대역 확보
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            🚨 DNS Zone Transfer(존 전송) 취약점을 통해 타겟망의 전체 서버 목록을 빼내는 원리를 이해합니다.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="mb-10">
+            <span class="module-badge bg-emerald-700">Module 3. 스캐닝 및 취약점 분석 (Scanning & Enumeration)</span>
+            <table>
+                <colgroup>
+                    <col style="width: 20%;">
+                    <col style="width: 40%;">
+                    <col style="width: 40%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>주제 (Topic)</th>
+                        <th>주요 학습 내용 (Contents)</th>
+                        <th>실무 팁 및 주의사항 (Tips & Remarks)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold text-slate-800">능동적 포트 스캐닝</td>
+                        <td class="text-sm text-slate-700">
+                            - <a href="https://nmap.org/" target="_blank" class="text-blue-600 underline">Nmap(Network Mapper)</a>의 기본 구조 및 호스트 탐색<br>
+                            - TCP 3-Way Handshake 원리 및 <strong>SYN 스텔스 스캔(<code>-sS</code>)</strong> 동작 방식<br>
+                            - 포트 상태(Open, Closed, Filtered) 분석 및 방화벽 추론
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            💡 <code>-oN</code> 옵션으로 스캔 결과를 파일로 저장하는 습관을 들여 보고서 작성 시간을 단축합니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">버전 및 OS 탐지</td>
+                        <td class="text-sm text-slate-700">
+                            - 서비스 버전 탐지(<code>-sV</code>) 및 운영체제 지문 인식(<code>-O</code>)<br>
+                            - Nmap 스크립팅 엔진(NSE)을 이용한 맞춤형 취약점 스캔 (<code>--script vuln</code>)
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            <div class="aws-billing-box !m-0 !p-3">
+                                <strong>💰 AWS 환경 실습 경고:</strong><br>
+                                퍼블릭 클라우드(EC2)에서 <code>-p- (전체 포트)</code> 스캔 시 막대한 아웃바운드 패킷 요금(1GB당 약 $0.09)이 부과될 수 있습니다.
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">취약점 스캐너 운용</td>
+                        <td class="text-sm text-slate-700">
+                            - OpenVAS / Nessus 아키텍처 이해 및 플러그인 동기화<br>
+                            - <strong>CVE(Common Vulnerabilities and Exposures, 공통 취약점 및 노출)</strong> 코드 분석 및 CVSS 점수 해석
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            🚨 <strong>중요:</strong> 자동화 도구가 출력한 'Critical(위험)' 결과는 오탐(False Positive)일 수 있으므로 반드시 수동 검증이 필요합니다.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="mb-10">
+            <span class="module-badge bg-amber-600">Module 4. 웹 애플리케이션 해킹 기초 (Web App Hacking)</span>
+            <table>
+                <colgroup>
+                    <col style="width: 20%;">
+                    <col style="width: 40%;">
+                    <col style="width: 40%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>주제 (Topic)</th>
+                        <th>주요 학습 내용 (Contents)</th>
+                        <th>실무 팁 및 주의사항 (Tips & Remarks)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold text-slate-800">웹 프록시 환경 구축</td>
+                        <td class="text-sm text-slate-700">
+                            - HTTP Request/Response 메시지 구조 심층 분석<br>
+                            - <strong>Burp Suite(버프 스위트)</strong> 설치 및 Proxy Intercept(패킷 가로채기) 세팅<br>
+                            - Repeater 탭을 활용한 변조 패킷 재전송 실습
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            💡 웹 공격의 시작은 브라우저가 서버로 보내는 <strong>파라미터(Parameter)</strong>를 눈으로 직접 확인하고 변조하는 것입니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">인젝션 (Injection) 공격</td>
+                        <td class="text-sm text-slate-700">
+                            - <a href="https://owasp.org/www-project-top-ten/" target="_blank" class="text-blue-600 underline">OWASP Top 10</a> 취약점 개요<br>
+                            - <strong>SQL Injection (SQL 인젝션):</strong> 인증 우회(<code>' OR 1=1 --</code>) 및 데이터베이스 탈취 원리<br>
+                            - <strong>XSS (Cross-Site Scripting, 교차 사이트 스크립팅):</strong> 악성 자바스크립트를 이용한 세션 쿠키 탈취
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            🚨 <strong>방어 전략:</strong> Prepared Statement(구문 분석 분리) 및 입력값 무해화(Sanitization) 등 시큐어 코딩 기법을 함께 학습합니다.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Module 5 -->
+        <div class="mb-10">
+            <span class="module-badge bg-red-700">Module 5. 시스템 침투 및 익스플로이테이션 (System Exploitation)</span>
+            <table>
+                <colgroup>
+                    <col style="width: 20%;">
+                    <col style="width: 40%;">
+                    <col style="width: 40%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>주제 (Topic)</th>
+                        <th>주요 학습 내용 (Contents)</th>
+                        <th>실무 팁 및 주의사항 (Tips & Remarks)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold text-slate-800">패스워드 크래킹</td>
+                        <td class="text-sm text-slate-700">
+                            - <strong>Brute-force(무차별 대입 공격)</strong> vs <strong>Dictionary Attack(사전 대입 공격)</strong><br>
+                            - Hydra 도구를 활용한 SSH/FTP 서비스 인증 크래킹 실습<br>
+                            - SecLists 등 양질의 <strong>Wordlist(워드리스트, 공격 사전)</strong> 확보 방법
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            🚨 운영 서버에 무차별 대입 공격 시 <strong>계정 잠금(Account Lockout)</strong> 정책에 의해 서비스 장애(DoS)가 발생할 수 있음을 경고합니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">Metasploit Framework</td>
+                        <td class="text-sm text-slate-700">
+                            - <strong>MSF(Metasploit Framework, 메타스플로잇 프레임워크)</strong> 아키텍처 이해<br>
+                            - <code>search</code>, <code>use</code>, <code>set</code>, <code>exploit</code> 명령어 체계<br>
+                            - 취약한 서비스(예: vsftpd, Samba)를 타겟으로 한 <strong>RCE(Remote Code Execution, 원격 코드 실행)</strong> 실습
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            💡 시스템 침투 성공을 결정짓는 <strong>Payload(페이로드, 악성 행위 코드)</strong>의 두 가지 방식인 Bind Shell과 Reverse Shell의 네트워크 차이를 심도 있게 다룹니다.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Module 6 -->
+        <div class="mb-10">
+            <span class="module-badge bg-purple-700">Module 6. 포스트 익스플로이테이션 및 방어 아키텍처</span>
+            <table>
+                <colgroup>
+                    <col style="width: 20%;">
+                    <col style="width: 40%;">
+                    <col style="width: 40%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>주제 (Topic)</th>
+                        <th>주요 학습 내용 (Contents)</th>
+                        <th>실무 팁 및 주의사항 (Tips & Remarks)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold text-slate-800">후속 작업 (Post-Exploit)</td>
+                        <td class="text-sm text-slate-700">
+                            - 최초 침투 후 일반 계정에서 root로 올라가는 <strong>Privilege Escalation(권한 상승)</strong> 기법<br>
+                            - <strong>Meterpreter(미터프리터)</strong> 콘솔을 활용한 시스템 파일 덤프 및 화면 캡처<br>
+                            - 공격 흔적(Log) 삭제 및 백도어(Backdoor) 유지를 통한 지속성 확보
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            💡 침투에 성공하는 것보다 로그 감시를 피해 <strong>은밀하게(Stealthy) 오래 머무는 것</strong>이 고급 해커의 핵심 역량입니다.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">보안 보고서 및 방어 설계</td>
+                        <td class="text-sm text-slate-700">
+                            - 경영진과 개발자를 설득하기 위한 전문적인 <strong>모의 해킹 결과 보고서(Pentest Report)</strong> 작성법<br>
+                            - IDS/IPS 시그니처 룰 설정 및 WAF(웹 방화벽) 도입 전략<br>
+                            - 엔터프라이즈 보안의 핵심: <strong>최소 권한의 원칙(Principle of Least Privilege)</strong>
+                        </td>
+                        <td class="text-sm text-slate-600">
+                            💡 모든 공격 실습은 최종적으로 "우리의 인프라스트럭처(블루팀)를 어떻게 더 견고하게 만들 것인가?"라는 아키텍트의 시각으로 귀결되어야 합니다.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>
