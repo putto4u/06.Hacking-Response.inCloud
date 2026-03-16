@@ -1,6 +1,6 @@
 import os
 import markdown
-from datetime import datetime
+from datetime import datetime 
 
 def generate_index():
     exclude_dirs = {'.git', '.github', '.pytest_cache', '__pycache__', 'assets'}
