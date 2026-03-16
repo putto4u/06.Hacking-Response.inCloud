@@ -37,6 +37,7 @@ def generate_index():
 
     # ---------------------------------------------------------------------------
     # [2] 동적 생성 TOC(Table of Contents, 목차) 전용 HTML 헤더
+    #     -> 초기 상태: EXPAND ALL 버튼으로 설정
     # ---------------------------------------------------------------------------
     toc_html_header = """<!DOCTYPE html>
 <html lang="ko" class="dark">
@@ -83,20 +84,27 @@ def generate_index():
             <h1 class="text-2xl md:text-3xl font-black text-slate-100 tracking-wide">
                 <i class="fas fa-network-wired text-cyan-500 mr-3"></i>DIRECTORY INDEX
             </h1>
+            <!-- 초기 상태를 모든 폴더가 닫혀있다는 전제하에 EXPAND ALL로 설정 -->
             <button onclick="toggleAllFolders()" class="group flex items-center space-x-2 bg-slate-800/80 hover:bg-slate-700 text-cyan-400 py-2 px-4 rounded-lg border border-cyan-900/50 transition-all duration-300 shadow-md">
                 <i class="fas fa-folder" id="global-toggle-icon"></i>
-                <span class="font-mono text-xs font-bold tracking-widest" id="global-toggle-text">Expand ALL</span>
+                <span class="font-mono text-xs font-bold tracking-widest" id="global-toggle-text">EXPAND ALL</span>
             </button>
         </div>
         <div class="space-y-6">
 """
 
+    # ---------------------------------------------------------------------------
+    # JS(JavaScript, 자바스크립트) 제어 로직
+    # 초기 상태 변수 isAllExpanded를 false로 설정하여 로드 시점과 동기화
+    # ---------------------------------------------------------------------------
     toc_html_footer = """
         </div>
     </div>
     
     <script>
-        let isAllExpanded = true;
+        // 초기 렌더링 상태가 축소(Collapse)이므로 상태 변수를 false로 초기화
+        let isAllExpanded = false;
+        
         function toggleFolder(element) {
             const section = element.closest('.folder-section');
             const listContainer = section.querySelector('.list-container');
@@ -185,7 +193,7 @@ def generate_index():
     <script>tailwind.config = {{ darkMode: 'class' }}</script>
 </head>
 <body class="relative">
-    <!-- 떠있는 저자 박스 (어디서든 목차로 복귀 가능) - 오른쪽 끝으로 이동 적용 -->
+    <!-- 떠있는 저자 박스 (어디서든 목차로 복귀 가능) -->
     <a href="toc.html" target="content-frame" class="absolute top-5 right-5 md:top-6 md:right-8 z-50 group cursor-pointer block">
         <div class="flex items-center space-x-1.5 bg-slate-900/80 py-1.5 px-3 rounded-lg border border-cyan-900/50 backdrop-blur-md shadow-[0_0_10px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.4)]">
             <div class="relative flex h-2 w-2 mr-0.5">
@@ -252,20 +260,25 @@ def generate_index():
         base_icon = "fa-server" if is_root else "fa-folder-open"
         closed_icon = "fa-server" if is_root else "fa-folder"
         
-        # 목차 내 개별 폴더 섹션 구성
+        # 렌더링 시점에 보여질 초기 아이콘 (루트 서버를 제외하고 닫힌 폴더로 렌더링)
+        initial_folder_icon = "fa-server" if is_root else "fa-folder"
+        
+        # 목차 내 개별 폴더 섹션 구성 
+        # grid-rows-[0fr] 및 opacity-0을 기본값으로 할당하여 초기 접힘 상태 유지
+        # chevron-icon에 rotate-180 클래스를 기본으로 주어 방향 일치
         toc_body += f"""
         <div class="folder-section bg-slate-900/60 rounded-xl border border-slate-700/80 shadow-lg transition-all duration-300">
             <div class="folder-header flex items-center p-4 cursor-pointer group hover:bg-slate-800/80 rounded-t-xl transition-colors" 
                  onclick="toggleFolder(this)" 
                  data-base-icon="{base_icon}" 
                  data-closed-icon="{closed_icon}">
-                <i class="folder-icon fas {base_icon} text-cyan-500 w-6 text-center text-lg transition-transform duration-300 group-hover:scale-110"></i>
+                <i class="folder-icon fas {initial_folder_icon} text-cyan-500 w-6 text-center text-lg transition-transform duration-300 group-hover:scale-110"></i>
                 <h2 class="text-base font-bold text-slate-200 ml-3 group-hover:text-cyan-300 tracking-wide">{display_folder}</h2>
                 <span class="text-cyan-600/80 text-[10px] font-mono ml-3 font-bold bg-slate-950/50 px-2 py-1 rounded-md">[{len(files)}]</span>
-                <i class="fas fa-chevron-up ml-auto text-slate-500 text-sm transition-transform duration-300 chevron-icon"></i>
+                <i class="fas fa-chevron-up ml-auto text-slate-500 text-sm transition-transform duration-300 chevron-icon rotate-180"></i>
             </div>
             
-            <div class="list-container grid transition-all duration-300 ease-in-out grid-rows-[1fr] opacity-100 border-t border-slate-700/80">
+            <div class="list-container grid transition-all duration-300 ease-in-out grid-rows-[0fr] opacity-0 border-t border-slate-700/80">
                 <div class="overflow-hidden bg-slate-950/40 rounded-b-xl">
                     <ul class="py-2">
         """
@@ -300,7 +313,7 @@ def generate_index():
     with open('toc.html', 'w', encoding='utf-8') as f:
         f.write(full_toc_html)
     
-    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Author box repositioned to the right.")
+    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Directory structure collapsed by default.")
 
 if __name__ == "__main__":
     generate_index()
