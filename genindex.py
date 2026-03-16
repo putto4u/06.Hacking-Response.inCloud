@@ -96,7 +96,7 @@ def generate_index():
     </div>
     
     <script>
-        let isAllExpanded = true;
+        let isAllExpanded = false;
         function toggleFolder(element) {
             const section = element.closest('.folder-section');
             const listContainer = section.querySelector('.list-container');
