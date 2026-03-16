@@ -7,7 +7,7 @@ def generate_index():
     exclude_files = {'index.html', 'generate_index.py', 'genindex.py', 'README.md', 'toc.html'}
     
     # ---------------------------------------------------------------------------
-    # [1] 마크다운 변환 문서용 기본 HTML(HyperText Markup Language, 웹페이지 구조 언어) 헤더/푸터
+    # [1] 마크다운 변환 문서용 기본 HTML 헤더/푸터
     # ---------------------------------------------------------------------------
     doc_html_header = """<!DOCTYPE html>
 <html lang="ko" class="dark">
@@ -29,14 +29,13 @@ def generate_index():
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
     </style>
-    <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
 <body class="p-6 pt-20 md:p-10 md:pt-24 max-w-5xl mx-auto">
 """
     doc_html_footer = "</body></html>"
 
     # ---------------------------------------------------------------------------
-    # [2] 동적 생성 TOC(Table of Contents, 목차) 전용 HTML 헤더
+    # [2] TOC(Table of Contents, 목차) 전용 HTML 헤더
     # ---------------------------------------------------------------------------
     toc_html_header = """<!DOCTYPE html>
 <html lang="ko" class="dark">
@@ -64,11 +63,8 @@ def generate_index():
         ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
         .text-glow { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8); }
     </style>
-    <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
 <body class="p-6 pt-20 md:p-12 md:pt-24">
-
-    <!-- 첫 화면(TOC) 전용 메인 타이틀 섹션 -->
     <div class="max-w-6xl mx-auto text-center mb-10 md:mb-14">
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-2 pb-1 bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">
             Cloud Security & Hacking Lab
@@ -83,7 +79,6 @@ def generate_index():
             <h1 class="text-2xl md:text-3xl font-black text-slate-100 tracking-wide">
                 <i class="fas fa-network-wired text-cyan-500 mr-3"></i>DIRECTORY INDEX
             </h1>
-            <!-- 초기 상태가 닫혀있으므로 '펼치기(EXPAND ALL)' 액션을 유도하는 텍스트 및 열린 폴더 아이콘 적용 -->
             <button onclick="toggleAllFolders()" class="group flex items-center space-x-2 bg-slate-800/80 hover:bg-slate-700 text-cyan-400 py-2 px-4 rounded-lg border border-cyan-900/50 transition-all duration-300 shadow-md">
                 <i class="fas fa-folder-open" id="global-toggle-icon"></i>
                 <span class="font-mono text-xs font-bold tracking-widest" id="global-toggle-text">EXPAND ALL</span>
@@ -92,18 +87,20 @@ def generate_index():
         <div class="space-y-6">
 """
 
-    # ---------------------------------------------------------------------------
-    # JS(JavaScript, 자바스크립트) 제어 로직
-    # 인라인 스타일(style="grid-template-rows") 기반 상태 판단 및 제어 적용
-    # ---------------------------------------------------------------------------
     toc_html_footer = """
         </div>
     </div>
     
     <script>
-        // 초기 렌더링 상태가 축소(Collapse)이므로 상태 변수를 false로 초기화
         let isAllExpanded = false;
         
+        // 부모 창의 Hash(해시) 업데이트 함수
+        function updateParentHash(path) {
+            if (window.parent) {
+                window.parent.location.hash = path;
+            }
+        }
+
         function toggleFolder(element) {
             const section = element.closest('.folder-section');
             const listContainer = section.querySelector('.list-container');
@@ -111,35 +108,20 @@ def generate_index():
             const chevronIcon = element.querySelector('.chevron-icon');
             const baseIcon = element.getAttribute('data-base-icon');
             
-            // CSS Grid 인라인 속성값을 직접 확인하여 Tailwind JIT 컴파일 오류 원천 회피
             const isExpanded = listContainer.style.gridTemplateRows === '1fr';
 
             if (isExpanded) {
-                // 축소(Collapse) 상태로 전환
                 listContainer.style.gridTemplateRows = '0fr';
                 listContainer.classList.remove('opacity-100', 'border-slate-700/80');
                 listContainer.classList.add('opacity-0', 'border-transparent');
-                
-                chevronIcon.classList.remove('fa-chevron-up');
-                chevronIcon.classList.add('fa-chevron-down');
-                
-                if (baseIcon !== 'fa-server') {
-                    folderIcon.classList.remove('fa-folder-open');
-                    folderIcon.classList.add('fa-folder');
-                }
+                chevronIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                if (baseIcon !== 'fa-server') folderIcon.classList.replace('fa-folder-open', 'fa-folder');
             } else {
-                // 확장(Expand) 상태로 전환
                 listContainer.style.gridTemplateRows = '1fr';
                 listContainer.classList.remove('opacity-0', 'border-transparent');
                 listContainer.classList.add('opacity-100', 'border-slate-700/80');
-                
-                chevronIcon.classList.remove('fa-chevron-down');
-                chevronIcon.classList.add('fa-chevron-up');
-                
-                if (baseIcon !== 'fa-server') {
-                    folderIcon.classList.remove('fa-folder');
-                    folderIcon.classList.add('fa-folder-open');
-                }
+                chevronIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                if (baseIcon !== 'fa-server') folderIcon.classList.replace('fa-folder', 'fa-folder-open');
             }
         }
 
@@ -153,21 +135,14 @@ def generate_index():
                 const section = header.closest('.folder-section');
                 const listContainer = section.querySelector('.list-container');
                 const isCurrentlyExpanded = listContainer.style.gridTemplateRows === '1fr';
-                
-                if (isAllExpanded !== isCurrentlyExpanded) {
-                    toggleFolder(header);
-                }
+                if (isAllExpanded !== isCurrentlyExpanded) toggleFolder(header);
             });
 
             if (isAllExpanded) {
-                // 전체가 확장된 상태이므로, 버튼은 '모두 축소(COLLAPSE ALL)' 액션을 유도하도록 변경
-                globalBtnIcon.classList.remove('fa-folder-open');
-                globalBtnIcon.classList.add('fa-folder');
+                globalBtnIcon.classList.replace('fa-folder-open', 'fa-folder');
                 globalBtnText.innerText = 'COLLAPSE ALL';
             } else {
-                // 전체가 축소된 상태이므로, 버튼은 '모두 확장(EXPAND ALL)' 액션을 유도하도록 변경
-                globalBtnIcon.classList.remove('fa-folder');
-                globalBtnIcon.classList.add('fa-folder-open');
+                globalBtnIcon.classList.replace('fa-folder', 'fa-folder-open');
                 globalBtnText.innerText = 'EXPAND ALL';
             }
         }
@@ -177,7 +152,7 @@ def generate_index():
 """
 
     # ---------------------------------------------------------------------------
-    # [3] 단일 화면 레이아웃 (Iframe을 전체 영역으로 확장) 메인 HTML 헤더/푸터
+    # [3] 메인 레이아웃 (주소창 Hash 제어 스크립트 포함)
     # ---------------------------------------------------------------------------
     index_html = f"""<!DOCTYPE html>
 <html lang="ko" class="dark">
@@ -204,24 +179,48 @@ def generate_index():
         }}
         .neon-glow {{ text-shadow: 0 0 8px rgba(34, 211, 238, 0.6); }}
     </style>
-    <script>tailwind.config = {{ darkMode: 'class' }}</script>
 </head>
 <body class="relative">
-    <!-- 떠있는 저자 박스 (어디서든 목차로 복귀 가능) -->
-    <a href="toc.html" target="content-frame" class="absolute top-5 right-5 md:top-6 md:right-8 z-50 group cursor-pointer block">
+    <!-- 저자 박스: 클릭 시 목차로 이동하며 Hash도 초기화 -->
+    <a href="#toc.html" onclick="setFrameSource('toc.html')" class="absolute top-5 right-5 md:top-6 md:right-8 z-50 group cursor-pointer block">
         <div class="flex items-center space-x-1.5 bg-slate-900/80 py-1.5 px-3 rounded-lg border border-cyan-900/50 backdrop-blur-md shadow-[0_0_10px_rgba(8,145,178,0.2)] transition-all duration-300 group-hover:border-cyan-400/60 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.4)]">
             <div class="relative flex h-2 w-2 mr-0.5">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
             </div>
-            <span class="font-mono text-[8px] md:text-[10px] text-slate-400 tracking-wider">CHIEF SYSTEM ARCHITECT <span class="text-cyan-500 ml-0.5">❯</span></span>
+            <span class="font-mono text-[8px] md:text-[10px] text-slate-400 tracking-wider uppercase">Chief System Architect <span class="text-cyan-500 ml-0.5">❯</span></span>
             <span class="font-black text-cyan-300 tracking-widest font-mono text-xs md:text-sm neon-glow ml-0.5">PUTTO</span>
             <span class="font-bold text-slate-200 tracking-widest font-mono text-xs md:text-sm">'S LECTURES</span>
         </div>
     </a>
 
-    <!-- 전체 화면 Iframe (목차 및 개별 문서 출력 영역) -->
     <iframe name="content-frame" id="content-frame" class="absolute inset-0 w-full h-full border-none z-10 bg-transparent" src="toc.html"></iframe>
+
+    <script>
+        const frame = document.getElementById('content-frame');
+
+        // 프레임 소스 변경 및 Hash 업데이트 함수
+        function setFrameSource(path) {
+            frame.src = path;
+            window.location.hash = path;
+        }
+
+        // 초기 로드 시 또는 새로고침 시 Hash를 읽어 프레임 소스 설정
+        function handleHash() {
+            const currentHash = window.location.hash.replace('#', '');
+            if (currentHash && currentHash !== 'toc.html') {
+                frame.src = currentHash;
+            } else {
+                frame.src = 'toc.html';
+            }
+        }
+
+        // 주소창의 Hash가 수동으로 변경될 때 감지
+        window.addEventListener('hashchange', handleHash);
+        
+        // 페이지 로드 시 실행
+        window.addEventListener('load', handleHash);
+    </script>
 </body>
 </html>
 """
@@ -229,9 +228,7 @@ def generate_index():
     structure = {}
     toc_body = ""
     
-    # ---------------------------------------------------------------------------
     # [4] 마크다운 변환 및 개별 HTML 파일 생성
-    # ---------------------------------------------------------------------------
     for root, dirs, files in os.walk('.'):
         dirs[:] = [d for d in dirs if d not in exclude_dirs]
         for file in files:
@@ -244,21 +241,16 @@ def generate_index():
                     md_text = f.read()
 
                 md_html = markdown.markdown(md_text, extensions=['fenced_code', 'tables'])
-
                 doc_content = f'''
                 <div class="prose prose-invert prose-slate max-w-none prose-img:rounded-xl prose-a:text-cyan-400 hover:prose-a:text-cyan-300 prose-headings:text-slate-100 prose-strong:text-cyan-100 bg-slate-900/40 p-8 rounded-2xl border border-slate-700/50 shadow-xl">
                     {md_html}
                 </div>
                 '''
-                
                 full_doc_html = doc_html_header + doc_content + doc_html_footer
-
                 with open(html_path, 'w', encoding='utf-8') as f:
                     f.write(full_doc_html)
 
-    # ---------------------------------------------------------------------------
-    # [5] 디렉토리 탐색 및 HTML 기반 목차(TOC) 생성 (사이드바 스타일 적용)
-    # ---------------------------------------------------------------------------
+    # [5] 디렉토리 탐색 및 목차 생성
     for root, dirs, files in os.walk('.'):
         dirs[:] = [d for d in dirs if d not in exclude_dirs]
         rel_path = os.path.relpath(root, '.')
@@ -270,63 +262,47 @@ def generate_index():
         files = structure[folder]
         is_root = folder == "."
         display_folder = "Root Directory" if is_root else folder
-        
         base_icon = "fa-server" if is_root else "fa-folder-open"
-        closed_icon = "fa-server" if is_root else "fa-folder"
-        
-        # 렌더링 시점에 보여질 초기 아이콘 (루트 서버를 제외하고 닫힌 폴더로 렌더링)
         initial_folder_icon = "fa-server" if is_root else "fa-folder"
         
-        # 목차 내 개별 폴더 섹션 구성 
-        # grid-template-rows: 0fr 인라인 스타일을 강제 삽입하여 초기 렌더링 시 완벽한 숨김 처리 보장
-        # 화살표 아이콘을 명시적인 fa-chevron-down 으로 설정
         toc_body += f"""
-        <div class="folder-section bg-slate-900/60 rounded-xl border border-slate-700/80 shadow-lg transition-all duration-300">
+        <div class="folder-section bg-slate-900/60 rounded-xl border border-slate-700/80 shadow-lg">
             <div class="folder-header flex items-center p-4 cursor-pointer group hover:bg-slate-800/80 rounded-t-xl transition-colors" 
-                 onclick="toggleFolder(this)" 
-                 data-base-icon="{base_icon}">
+                 onclick="toggleFolder(this)" data-base-icon="{base_icon}">
                 <i class="folder-icon fas {initial_folder_icon} text-cyan-500 w-6 text-center text-lg transition-transform duration-300 group-hover:scale-110"></i>
                 <h2 class="text-base font-bold text-slate-200 ml-3 group-hover:text-cyan-300 tracking-wide">{display_folder}</h2>
                 <span class="text-cyan-600/80 text-[10px] font-mono ml-3 font-bold bg-slate-950/50 px-2 py-1 rounded-md">[{len(files)}]</span>
                 <i class="fas fa-chevron-down ml-auto text-slate-500 text-sm transition-transform duration-300 chevron-icon"></i>
             </div>
-            
             <div class="list-container grid transition-all duration-300 ease-in-out opacity-0 border-t border-transparent" style="grid-template-rows: 0fr;">
                 <div class="overflow-hidden bg-slate-950/40 rounded-b-xl">
                     <ul class="py-2">
         """
         
         for file in files:
-            file_path = os.path.join(folder, file) if not is_root else file
+            # 파일 경로 계산 (경로 구분자 '/'로 통일)
+            file_path = (os.path.join(folder, file) if not is_root else file).replace('\\', '/')
             display_name = file.replace('.html', '').replace('_', ' ').replace('-', ' ')
             
+            # 링크 클릭 시 updateParentHash 호출하여 주소창 동기화
             toc_body += f"""
                         <li>
-                            <a href="{file_path}" class="list-hover flex items-center py-3 px-5 border-l-2 border-transparent group text-sm">
+                            <a href="{file_path}" target="content-frame" onclick="updateParentHash('{file_path}')"
+                               class="list-hover flex items-center py-3 px-5 border-l-2 border-transparent group text-sm">
                                 <i class="fas fa-file-code text-slate-600 mr-3 group-hover:text-cyan-400"></i>
                                 <span class="text-slate-300 font-medium group-hover:text-cyan-100">{display_name}</span>
                             </a>
                         </li>
             """
-            
-        toc_body += """
-                    </ul>
-                </div>
-            </div>
-        </div>
-        """
+        toc_body += "</ul></div></div></div>"
 
-    # ---------------------------------------------------------------------------
-    # [6] 메인 index.html 및 목차용 toc.html 파일 작성
-    # ---------------------------------------------------------------------------
+    # [6] 파일 저장
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(index_html)
-        
-    full_toc_html = toc_html_header + toc_body + toc_html_footer
     with open('toc.html', 'w', encoding='utf-8') as f:
-        f.write(full_toc_html)
+        f.write(toc_html_header + toc_body + toc_html_footer)
     
-    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Layout updated. Inline styles enforced for robust collapsing.")
+    print(f"System Log: {datetime.now().strftime('%H:%M:%S')} - Hash-based navigation enabled. URLs are now persistent.")
 
 if __name__ == "__main__":
     generate_index()
