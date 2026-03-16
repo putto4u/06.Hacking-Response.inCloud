@@ -23,7 +23,7 @@
             <div class="relative z-10 text-center">
                 <p class="text-blue-400 font-bold tracking-widest text-xs uppercase mb-2">VirtualBox 7.x Manual</p>
                 <h1 class="text-3xl md:text-4xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 italic">STEP-BY-STEP KALI GUIDE</h1>
-                <p class="text-slate-400 text-sm">최신 버전 UI 완벽 반영: 클릭 한 번까지 놓치지 않는 정밀 가이드</p>
+                <p class="text-slate-400 text-sm">최신 버전 UI 완벽 반영 & 고급 편의 설정 총망라 가이드</p>
             </div>
         </header>
 
@@ -51,7 +51,7 @@
                 </div>
             </section>
 
-            <!-- 2. 가상 머신 등록 (최신 UI 반영) -->
+            <!-- 2. 가상 머신 등록 -->
             <section>
                 <div class="flex items-center mb-6">
                     <div class="w-10 h-10 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg mr-3 shadow-sm">
@@ -61,7 +61,7 @@
                 </div>
                 
                 <div class="space-y-6">
-                    <!-- 정석 방법 (수정됨) -->
+                    <!-- 정석 방법 -->
                     <div class="bg-white border-2 border-slate-100 p-6 rounded-2xl shadow-sm relative">
                         <span class="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 rounded-bl-xl text-xs font-bold">정확한 메뉴 위치</span>
                         <h3 class="font-bold text-slate-800 mb-4 flex items-center italic">
@@ -101,7 +101,7 @@
                 </div>
             </section>
 
-            <!-- 3. 상세 옵션 해설 -->
+            <!-- 3. 상세 옵션 해설 (네트워크 카드 추가 포함) -->
             <section>
                 <div class="flex items-center mb-6">
                     <div class="w-10 h-10 flex items-center justify-center bg-blue-100 text-blue-600 rounded-lg mr-3 shadow-sm">
@@ -136,19 +136,40 @@
                         </div>
                     </div>
 
-                    <!-- 네트워크 -->
-                    <div class="config-section p-6">
-                        <h3 class="font-bold text-lg text-slate-800 mb-4 italic">🌐 네트워크 (Network)</h3>
-                        <div class="space-y-4 text-sm text-slate-600">
-                            <p class="font-bold text-slate-800">[어댑터 1] 탭: <span class="btn-blue italic">다음에 연결됨:</span> 항목 확인</p>
-                            <ul class="list-disc ml-5 space-y-2 text-xs">
-                                <li><strong>NAT:</strong> 기본값. 내 윈도우 PC를 통해 인터넷만 연결합니다. 외부 해킹 위협에서 안전합니다.</li>
-                                <li><strong>어댑터에 브리지:</strong> 공유기에 직접 연결된 컴퓨터처럼 설정합니다. 공유기 내 다른 기기와 직접 통신할 때 씁니다.</li>
-                            </ul>
+                    <!-- 네트워크 및 어댑터 추가 -->
+                    <div class="config-section p-6 bg-blue-50 border-l-4 border-blue-500">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4 italic flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                            🌐 네트워크 (Network) 및 어댑터 추가
+                        </h3>
+                        <div class="space-y-6 text-sm text-slate-700">
+                            <div>
+                                <p class="font-bold text-slate-800 mb-2 border-b border-blue-200 pb-1">[어댑터 1] 탭: 기본 네트워크</p>
+                                <ul class="list-disc ml-5 space-y-1 text-xs">
+                                    <li><strong>NAT (기본값):</strong> 내 윈도우 PC를 통해 인터넷만 연결. 외부 해킹 위협으로부터 안전.</li>
+                                    <li><strong>어댑터에 브리지:</strong> 공유기에 직접 연결된 컴퓨터처럼 작동. 다른 기기(공유기 대역)와 직접 통신할 때 사용.</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- 네트워크 카드 추가 방법 -->
+                            <div class="bg-white p-4 rounded-xl border border-blue-200 shadow-sm">
+                                <p class="font-bold text-blue-700 mb-2 flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                    팁: 네트워크 카드(어댑터) 2개 동시에 사용하기
+                                </p>
+                                <p class="text-xs text-slate-600 mb-2">실습을 하다 보면 인터넷용(NAT)과 내부망용(Host-Only 등) 랜카드가 동시에 2개 필요할 때가 있습니다. 이때 어댑터를 추가합니다.</p>
+                                <ol class="list-decimal ml-5 space-y-2 text-xs text-slate-700">
+                                    <li>가상 머신이 꺼져 있는 상태에서 <span class="menu-path">설정</span> -> <span class="menu-path">네트워크</span>로 들어갑니다.</li>
+                                    <li>상단의 <strong>[어댑터 2]</strong> 탭을 클릭합니다.</li>
+                                    <li><strong>'네트워크 어댑터 사용하기(Enable Network Adapter)'</strong> 체크박스에 체크합니다.</li>
+                                    <li>'다음에 연결됨'에서 원하는 통신 방식(예: 호스트 전용 어댑터)을 선택하고 [확인]을 누릅니다.</li>
+                                    <li class="italic text-slate-500">* 리눅스 부팅 후 터미널에 <code class="bg-gray-100">ip a</code>를 치면 <code class="bg-gray-100">eth0</code> 외에 <code class="bg-gray-100">eth1</code>이라는 두 번째 랜카드가 생성된 것을 볼 수 있습니다.</li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- 하드디스크 연결 핵심 답변 (수정됨) -->
+                    <!-- 하드디스크 연결 핵심 답변 (유지) -->
                     <div class="bg-blue-900 text-white p-6 rounded-2xl shadow-lg border-4 border-blue-400">
                         <h3 class="text-xl font-bold mb-3 flex items-center italic">❓ 디스크(.vdi) 파일을 따로 선택해야 하나요?</h3>
                         <p class="text-sm leading-relaxed mb-4">
@@ -162,7 +183,7 @@
                 </div>
             </section>
 
-            <!-- 4. 부팅 및 초기 로그인 (NEW) -->
+            <!-- 4. 부팅 및 초기 로그인 -->
             <section>
                 <div class="flex items-center mb-6">
                     <div class="w-10 h-10 flex items-center justify-center bg-yellow-100 text-yellow-600 rounded-lg mr-3 shadow-sm">
@@ -192,82 +213,170 @@
                 </div>
             </section>
 
-            <!-- 5. 네트워크 IP 설정 및 확인 (번호 밀림) -->
+            <!-- 5. 네트워크 IP 설정 (GUI/CLI, DHCP/고정) 대폭 확장 -->
             <section>
                 <div class="flex items-center mb-6">
                     <div class="w-10 h-10 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-lg mr-3 shadow-sm">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
-                    <h2 class="text-2xl font-bold text-slate-800">5. 네트워크 IP 확인 및 고정 설정</h2>
+                    <h2 class="text-2xl font-bold text-slate-800">5. 네트워크 IP 마스터 (DHCP & 고정 설정)</h2>
                 </div>
                 
                 <div class="space-y-6">
-                    <div>
-                        <h4 class="font-bold text-slate-700 text-sm mb-2 italic">현재 IP 주소 확인하기</h4>
-                        <p class="text-xs text-slate-500 mb-2">로그인 후 바탕화면이 뜨면 터미널(검은 창 아이콘)을 열고 입력하세요.</p>
+                    <!-- IP 확인 -->
+                    <div class="p-6 bg-white border border-slate-200 rounded-xl">
+                        <h4 class="font-bold text-slate-700 text-sm mb-2 italic">📌 현재 IP 주소 확인하기</h4>
+                        <p class="text-xs text-slate-500 mb-2">바탕화면이 뜨면 터미널(검은 창 아이콘)을 열고 입력하세요.</p>
                         <div class="cmd-box">
-                            ip addr show eth0
+                            ip addr show
                         </div>
-                        <p class="text-[11px] mt-1 italic">※ <code class="bg-slate-200 px-1 font-bold">inet 10.0.2.15/24</code> 처럼 적힌 부분이 내 가상 머신의 IP입니다.</p>
+                        <p class="text-xs mt-2 text-slate-600">※ <code class="bg-slate-100 px-1 font-bold">eth0</code> 항목 아래 <code class="bg-slate-100 px-1 font-bold">inet 10.0.2.15/24</code> 처럼 적힌 부분이 내 IP입니다.</p>
                     </div>
 
+                    <!-- GUI 방식 설정 -->
+                    <div class="bg-indigo-50 p-6 rounded-xl border border-indigo-200 shadow-sm">
+                        <h4 class="font-bold text-indigo-800 text-lg mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"></path></svg>
+                            마우스 클릭(GUI)으로 DHCP / 고정 IP 변경하기 (추천)
+                        </h4>
+                        <p class="text-xs text-indigo-700 mb-4 leading-relaxed">터미널 명령어가 익숙하지 않다면 윈도우처럼 그래픽 환경에서 손쉽게 설정할 수 있습니다.</p>
+                        
+                        <ol class="text-sm space-y-3 text-indigo-900">
+                            <li class="bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                                <span class="font-bold">1. 연결 편집기 열기:</span> 칼리 바탕화면 오른쪽 위 구석에 있는 <strong>네트워크 아이콘(컴퓨터 모니터 2개 모양)</strong>을 <strong>[마우스 우클릭]</strong>한 후 <strong>'Edit Connections...'</strong>를 클릭합니다.
+                            </li>
+                            <li class="bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                                <span class="font-bold">2. 어댑터 선택:</span> 리스트에서 변경할 네트워크(예: <strong>Wired connection 1</strong>)를 더블 클릭하거나 하단의 톱니바퀴(설정) 아이콘을 누릅니다.
+                            </li>
+                            <li class="bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                                <span class="font-bold">3. IPv4 Settings 탭 이동:</span> 창 상단의 <strong>[IPv4 Settings]</strong> 탭을 누릅니다.
+                            </li>
+                            <li class="bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                                <span class="font-bold">4. 방식(Method) 선택하기:</span>
+                                <ul class="list-disc ml-6 mt-2 space-y-2 text-xs">
+                                    <li><span class="font-bold text-blue-600">자동으로 받기 (DHCP):</span> Method를 <strong>'Automatic (DHCP)'</strong>로 선택 후 Save.</li>
+                                    <li><span class="font-bold text-red-600">고정 IP 설정 (Static):</span> Method를 <strong>'Manual'</strong>로 변경 → [Add] 버튼 클릭 → Address(원하는 IP), Netmask(보통 24 또는 255.255.255.0), Gateway 입력 → DNS servers에 8.8.8.8 입력 후 Save.</li>
+                                </ul>
+                            </li>
+                            <li class="bg-white p-3 rounded-lg border border-indigo-100 shadow-sm">
+                                <span class="font-bold">5. 재연결:</span> 설정 창을 닫고, 다시 우측 상단 네트워크 아이콘을 <strong>[좌클릭]</strong>하여 <strong>'Disconnect'</strong>를 누른 후 다시 <strong>'Wired connection 1'</strong>을 눌러 재접속하면 적용됩니다.
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- CLI 방식 (터미널) -->
                     <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                        <h4 class="font-bold text-slate-700 text-sm mb-3 italic">고정 IP(Static IP) 설정 (상세 경로)</h4>
+                        <h4 class="font-bold text-slate-700 text-sm mb-3 italic">💻 [참고] 터미널(CLI) 명령어로 고정 IP 설정하기</h4>
                         <ol class="text-xs space-y-3">
                             <li><span class="font-bold">1단계:</span> 터미널에 <code class="bg-slate-800 text-white p-1 px-2 rounded">sudo mousepad /etc/network/interfaces</code> 입력</li>
-                            <li><span class="font-bold">2단계:</span> 열린 메모장 맨 아래에 다음 내용을 복사해서 붙여넣고 저장하세요. (본인의 네트워크 대역에 맞게 수정 필요)
-                                <div class="cmd-box mt-2 leading-relaxed">
+                            <li><span class="font-bold">2단계:</span> 열린 메모장 맨 아래에 내용을 수정/추가 (본인 대역에 맞게 작성)
+                                <div class="cmd-box mt-2 leading-relaxed text-slate-300">
+                                    # DHCP로 받을 때 (기본값)<br>
+                                    # auto eth0<br>
+                                    # iface eth0 inet dhcp<br><br>
+                                    # 고정 IP로 설정할 때<br>
                                     auto eth0<br>
                                     iface eth0 inet static<br>
-                                    address 10.0.2.100<br>
+                                    address 192.168.0.50<br>
                                     netmask 255.255.255.0<br>
-                                    gateway 10.0.2.1
+                                    gateway 192.168.0.1
                                 </div>
                             </li>
-                            <li><span class="font-bold">3단계:</span> 터미널에서 네트워크 서비스 재시작: <br> <code class="bg-slate-800 text-white p-1 px-2 rounded">sudo systemctl restart networking</code></li>
+                            <li><span class="font-bold">3단계:</span> 재시작: <code class="bg-slate-800 text-white p-1 px-2 rounded">sudo systemctl restart networking</code></li>
                         </ol>
                     </div>
                 </div>
             </section>
 
-            <!-- 6. 필수 및 편의 기능 설정 (번호 밀림) -->
+            <!-- 6. 고급 편의 설정 (Root 계정, 화면 꺼짐 방지 등 대폭 확장) -->
             <section>
                 <div class="flex items-center mb-6">
                     <div class="w-10 h-10 flex items-center justify-center bg-orange-100 text-orange-600 rounded-lg mr-3 shadow-sm">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
                     </div>
-                    <h2 class="text-2xl font-bold text-slate-800 text-orange-600">6. 설치 직후 필수 세팅</h2>
+                    <h2 class="text-2xl font-bold text-slate-800 text-orange-600">6. 실무/실습용 고급 편의 세팅</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- 한글 폰트 -->
-                    <div class="p-5 bg-white border-2 border-slate-100 rounded-2xl">
-                        <h5 class="font-bold text-slate-800 text-sm mb-2">A. 한글 깨짐 방지 폰트 설치</h5>
-                        <p class="text-xs text-slate-500 mb-3">메뉴나 웹사이트의 한글을 표시하기 위해 터미널에 아래 명령어를 치세요.</p>
-                        <div class="cmd-box leading-relaxed">
-                            sudo apt update<br>
-                            sudo apt install fonts-nanum -y
+                <div class="space-y-6">
+                    
+                    <!-- Root 로그인 설정 -->
+                    <div class="p-6 bg-red-50 border-2 border-red-200 rounded-2xl shadow-sm">
+                        <h5 class="font-bold text-red-800 text-lg mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                            👑 최고 관리자 (Root) 계정 활성화 및 로그인
+                        </h5>
+                        <p class="text-sm text-red-700 mb-4 leading-relaxed">
+                            매번 명령어 앞에 `sudo`를 붙이기 귀찮다면, 최고 관리자인 `root` 계정으로 아예 로그인할 수 있습니다. 최신 칼리는 비밀번호만 부여하면 root 로그인이 열립니다.
+                        </p>
+                        <ol class="text-sm space-y-3 text-red-900 mb-4 ml-2">
+                            <li><strong>1. 터미널 열기:</strong> 일반 `kali` 계정에서 터미널을 엽니다.</li>
+                            <li><strong>2. Root 비밀번호 설정:</strong> 아래 명령어를 치고 앞으로 사용할 root 비밀번호를 2번 입력합니다.
+                                <div class="cmd-box mt-2 mb-2 text-slate-300">
+                                    sudo passwd root
+                                </div>
+                            </li>
+                            <li><strong>3. 재로그인:</strong> 칼리 우측 상단 전원 버튼을 눌러 <strong>[Log Out]</strong> 합니다.</li>
+                            <li><strong>4. Root 로그인:</strong> 로그인 화면이 뜨면 ID란에 <code class="font-bold text-blue-600 text-lg">root</code>, PW란에 <strong>방금 설정한 비밀번호</strong>를 치면 최고 관리자 화면으로 진입합니다!</li>
+                        </ol>
+                    </div>
+
+                    <!-- 화면 꺼짐(절전) 방지 -->
+                    <div class="p-6 bg-yellow-50 border-2 border-yellow-200 rounded-2xl shadow-sm">
+                        <h5 class="font-bold text-yellow-800 text-lg mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"></path></svg>
+                            💡 화면 꺼짐(화면 보호기/절전 모드) 완전 해제
+                        </h5>
+                        <p class="text-sm text-yellow-700 mb-4 leading-relaxed">
+                            오랜 시간 툴을 돌려놓고 기다려야 할 때 화면이 꺼지면서 잠금 화면으로 넘어가는 것을 막아줍니다.
+                        </p>
+                        <div class="bg-white p-4 rounded-lg border border-yellow-100 text-sm text-slate-700">
+                            <ol class="list-decimal ml-5 space-y-2">
+                                <li>바탕화면 <strong>좌측 상단 칼리 아이콘(🐉메뉴)</strong> 클릭</li>
+                                <li><span class="menu-path">Settings (설정)</span> -> <span class="menu-path">Power Manager (전원 관리자)</span> 실행</li>
+                                <li>상단의 <strong>[Display (디스플레이)]</strong> 탭을 클릭</li>
+                                <li>다음 3가지 항목의 슬라이더를 맨 왼쪽으로 당겨서 <strong>'Never (안 함)'</strong>으로 만듭니다.
+                                    <ul class="list-disc ml-6 mt-1 text-xs text-slate-500">
+                                        <li>Blank after (화면 비우기)</li>
+                                        <li>Put to sleep after (절전 모드)</li>
+                                        <li>Switch off after (화면 끄기)</li>
+                                    </ul>
+                                </li>
+                                <li><span class="font-bold text-yellow-600 mt-2 block">* (추가 팁)</span> [Security (보안)] 탭에서 'Automatically lock the session (세션 자동 잠금)' 항목도 <strong>Never</strong>로 바꾸면 잠금 화면도 뜨지 않습니다.</li>
+                            </ol>
                         </div>
                     </div>
-                    <!-- 업데이트 -->
-                    <div class="p-5 bg-white border-2 border-slate-100 rounded-2xl">
-                        <h5 class="font-bold text-slate-800 text-sm mb-2">B. 시스템 도구 최신화</h5>
-                        <p class="text-xs text-slate-500 mb-3">보안 도구들을 최신 상태로 업데이트합니다.</p>
-                        <div class="cmd-box">
-                            sudo apt full-upgrade -y
+
+                    <!-- 기타 기본 설정 (한글, 업데이트, 게스트 확장) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- 한글 폰트 -->
+                        <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                            <h5 class="font-bold text-slate-800 text-sm mb-2">A. 한글 깨짐 방지 폰트</h5>
+                            <p class="text-xs text-slate-500 mb-3">메뉴나 웹사이트의 한글을 네모 박스 없이 정상 표시합니다.</p>
+                            <div class="cmd-box leading-relaxed text-xs">
+                                sudo apt update<br>
+                                sudo apt install fonts-nanum -y
+                            </div>
+                        </div>
+                        <!-- 업데이트 -->
+                        <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                            <h5 class="font-bold text-slate-800 text-sm mb-2">B. 시스템 도구 최신화</h5>
+                            <p class="text-xs text-slate-500 mb-3">보안 툴들의 버전을 최신으로 맞춥니다. 주기적으로 실행하세요.</p>
+                            <div class="cmd-box text-xs">
+                                sudo apt full-upgrade -y
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- 게스트 확장 설명 -->
-                <div class="mt-6 p-5 bg-green-50 rounded-2xl border-2 border-green-200">
-                    <h5 class="font-bold text-green-800 text-sm mb-2 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 12.5a.5.5 0 01-.5-.5V10h-1a.5.5 0 010-1h1V7.5a.5.5 0 011 0V9h1a.5.5 0 010 1h-1v2a.5.5 0 01-.5.5z"></path></svg>
-                        해상도 조절이 안 되나요? (게스트 확장)
-                    </h5>
-                    <p class="text-xs text-green-700 leading-relaxed">
-                        화면이 너무 작다면 실행 중인 칼리 리눅스 창 위쪽 메뉴에서 <span class="menu-path">장치(D)</span> → <span class="menu-path">게스트 확장 CD 이미지 삽입...</span>을 클릭하세요. 설치가 완료되면 창 크기에 맞춰 해상도가 자동으로 변합니다.
-                    </p>
+                    
+                    <!-- 게스트 확장 설명 -->
+                    <div class="p-5 bg-green-50 rounded-2xl border border-green-200 shadow-sm">
+                        <h5 class="font-bold text-green-800 text-sm mb-2 flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 12.5a.5.5 0 01-.5-.5V10h-1a.5.5 0 010-1h1V7.5a.5.5 0 011 0V9h1a.5.5 0 010 1h-1v2a.5.5 0 01-.5.5z"></path></svg>
+                            해상도 조절 자동 맞춤 (게스트 확장 적용)
+                        </h5>
+                        <p class="text-xs text-green-700 leading-relaxed">
+                            마우스로 버추얼박스 창 크기를 늘려도 내부 바탕화면이 커지지 않는다면, 실행 중인 창 상단 메뉴에서 <span class="menu-path">장치(D)</span> → <span class="menu-path">게스트 확장 CD 이미지 삽입...</span>을 클릭하여 드라이버를 재설치하고 재부팅하세요.
+                        </p>
+                    </div>
                 </div>
             </section>
 
@@ -276,12 +385,15 @@
         <!-- 하단 푸터 -->
         <footer class="bg-slate-900 p-10 text-center text-slate-500 text-xs border-t border-slate-800">
             <p class="mb-2 uppercase font-bold tracking-[0.2em] text-blue-400">Security Training Material - VirtualBox 7.x & Kali</p>
-            <p>본 교재는 VirtualBox 7.x UI 업데이트를 완벽히 반영하여 제작된 최신 실습 매뉴얼입니다.</p>
+            <p>본 교재는 VirtualBox 7.x UI 업데이트 및 전문가용 편의 환경 세팅을 완벽히 반영하여 제작되었습니다.</p>
         </footer>
     </div>
 
     <!-- 플로팅 버튼 (출력용) -->
-    <div class="fixed bottom-6 right-6">
+    <div class="fixed bottom-6 right-6 flex flex-col space-y-3">
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-slate-700 hover:bg-slate-600 text-white p-3 rounded-full shadow-lg transition-all flex justify-center items-center opacity-80 hover:opacity-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+        </button>
         <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full shadow-2xl transition-all font-bold flex items-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
             PDF 교재로 저장하기
