@@ -24,10 +24,51 @@
 
                 <div class="prose prose-invert prose-slate max-w-none prose-img:rounded-xl prose-a:text-cyan-400 hover:prose-a:text-cyan-300 prose-headings:text-slate-100 prose-strong:text-cyan-100 bg-slate-900/40 p-8 rounded-2xl border border-slate-700/50 shadow-xl">
                     <h2>타켓서버만들기</h2>
-<p>우분투 14.04.6 desktop    ** cli 터미널 모드 변경  ctrl + Alt +F3
-아파치 2.2.8
-mysql 5.0.51a </p>
-<p>버전 고정 방법</p>
+<p>설치 계획
+1. 우분투 14.04.6 desktop    ** cli 터미널 모드 변경  ctrl + Alt +F3
+2. 아파치 2.2.8
+3. mysql 5.0.51a </p>
+<h2>1. 게이트웨이를 가져오지 못할 때</h2>
+<p>sudo vi /etc/network/interfaces</p>
+<pre><code># 로컬 루프백 인터페이스 (기존 내용 유지)
+auto lo
+iface lo inet loopback
+
+# 고정 IP 설정 (eth0 기준)
+auto eth0
+iface eth0 inet static
+    address 192.168.10.1xx       # 할당할 고정 IP 주소
+    netmask 255.255.255.0       # 서브넷 마스크 (Subnet Mask)
+    gateway 192.168.10.1         # 게이트웨이 (Gateway) 주소
+    dns-nameservers 8.8.8.8 8.8.4.4  # DNS 서버 주소 (Google DNS 예시)
+</code></pre>
+<p>dns 서버 설정</p>
+<pre><code>$ sudo vi /etc/resolv.conf
+#### 기존에 등록된 nameserver 정상적인 아이피로 있다면 추가할 필요없음
+#### 예) 168.126.63.1  한국 KR DNS 서버(정상, 가장 이상적임)가 이미 있다면 아래줄은 추가할 필요 없음
+
+## 없다면 아래줄 추가, 하나만 추가해도 됩니다. 
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+</code></pre>
+<p>리부팅 후 외부에서 타겟서버로 ping 테스트가 성공하면 ok!</p>
+<ol>
+<li>ssh 서버 설치 및 시작</li>
+</ol>
+<pre><code>sudo apt-get install openssh-server
+service ssh status
+sudo service ssh start
+# sudo service ssh restart
+sudo update-rc.d ssh defaults  # 부팅시 자동 서비스
+</code></pre>
+<ol>
+<li>
+<p>xshell 연결하기</p>
+</li>
+<li>
+<p>리눅스 버전 고정 하기</p>
+</li>
+</ol>
 <pre><code># 1. 현재 사용 중인 커널 관련 패키지들 고정 (가장 중요)
 sudo apt-mark hold linux-image-$(uname -r)
 sudo apt-mark hold linux-headers-$(uname -r)
