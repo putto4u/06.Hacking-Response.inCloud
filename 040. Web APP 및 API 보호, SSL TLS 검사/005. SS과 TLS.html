@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL/TLS Inspection 전문 교육 과정</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; line-height: 1.8; color: #333; background-color: #f8fafc; }
+        .content-block { background: white; border-radius: 12px; padding: 40px; margin-bottom: 50px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-left: 6px solid #2563eb; }
+        .highlight { color: #2563eb; font-weight: 700; }
+        .diagram-box { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0; }
+        .footer-note { font-size: 0.85rem; color: #64748b; margin-top: 10px; border-top: 1px solid #e2e8f0; padding-top: 5px; }
+        code { background: #e2e8f0; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
+        .curriculum-list li { margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
+    </style>
+</head>
+<body class="p-8 md:p-16">
+
+    <!-- Header Section -->
+    <header class="mb-16 border-b-4 border-blue-600 pb-8">
+        <h1 class="text-4xl font-black text-slate-800 mb-4">SSL/TLS Inspection: 암호화 트래픽 가시성 확보 및 보안 전략</h1>
+        <p class="text-xl text-slate-600">Deep Packet Inspection (DPI, 심층 패킷 분석) 기술을 활용한 보안 위협 대응</p>
+    </header>
+
+    <!-- Core Concepts Overview -->
+    <section class="content-block">
+        <h2 class="text-2xl font-bold mb-8 flex items-center">
+            <span class="mr-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            </span> 
+            주요 개념 (Core Concepts)
+        </h2>
+        <ul class="curriculum-list text-lg list-none p-0">
+            <li><strong>1. SSL/TLS의 정의와 목적:</strong> 데이터 보안을 위한 Encryption (암호화) 및 Authentication (인증) 메커니즘</li>
+            <li><strong>2. 암호화 트래픽의 이해:</strong> SSL (Secure Sockets Layer, 보안 소켓 계층) 및 TLS (Transport Layer Security, 전송 계층 보안)의 진화</li>
+            <li><strong>3. 보안 사각지대 분석:</strong> 암호화된 트래픽을 이용한 Malware (Malicious Software, 악성 소프트웨어) 유입 경로 분석</li>
+            <li><strong>4. SSL/TLS Inspection 메커니즘:</strong> MITM (Man-in-the-Middle, 중간자 개입) 방식의 가시성 확보 기술</li>
+            <li><strong>5. 인증서 체인 및 신뢰성:</strong> CA (Certificate Authority, 인증 기관) 관리 및 사설 루트 인증서 배포 전략</li>
+            <li><strong>6. 성능 및 프라이버시 고려사항:</strong> 복호화 부하 분산 및 개인정보 보호를 위한 Exemption (예외 처리) 목록 관리</li>
+        </ul>
+    </section>
+
+    <!-- Page 1: Introduction to SSL/TLS -->
+    <section class="content-block">
+        <h2 class="text-3xl font-bold mb-6">1. SSL/TLS의 기초 개념 및 보안 원리</h2>
+        
+        <div class="mb-8">
+            <p class="text-lg mb-4">인터넷과 같은 공개된 네트워크에서 데이터를 안전하게 주고받기 위해서는 <span class="highlight">SSL (Secure Sockets Layer, 보안 소켓 계층)</span> 및 그 후속 표준인 <span class="highlight">TLS (Transport Layer Security, 전송 계층 보안)</span>가 필수적입니다.</p>
+            <p class="text-lg mb-4">이 프로토콜들은 통신 대상이 누구인지 확인하는 <span class="highlight">Authentication (인증)</span>, 데이터를 제3자가 읽지 못하게 하는 <span class="highlight">Encryption (암호화)</span>, 그리고 데이터가 전송 중 변조되지 않았음을 보장하는 <span class="highlight">Integrity (무결성)</span>를 제공합니다.</p>
+        </div>
+
+        <div class="diagram-box">
+            <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" class="mx-auto w-full max-w-2xl">
+                <!-- Data Source -->
+                <rect x="50" y="70" width="100" height="60" rx="5" fill="#94a3b8"/>
+                <text x="100" y="105" text-anchor="middle" fill="white" font-size="14">평문 데이터</text>
+                
+                <!-- Encryption Process -->
+                <path d="M 150 100 L 300 100" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                <text x="225" y="90" text-anchor="middle" fill="#2563eb" font-size="12">TLS 암호화</text>
+                
+                <!-- Locked Data -->
+                <rect x="300" y="60" width="200" height="80" rx="10" fill="#2563eb"/>
+                <path d="M 400 35 L 400 60 M 370 60 C 370 30 430 30 430 60" stroke="#f59e0b" stroke-width="5" fill="none"/>
+                <text x="400" y="105" text-anchor="middle" fill="white" font-weight="bold">암호화된 패킷</text>
+                
+                <!-- Delivery -->
+                <path d="M 500 100 L 650 100" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                
+                <!-- Destination -->
+                <rect x="650" y="70" width="100" height="60" rx="5" fill="#1e293b"/>
+                <text x="700" y="105" text-anchor="middle" fill="white" font-size="14">안전한 수신</text>
+
+                <defs>
+                    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                      <path d="M0,0 L0,6 L9,3 z" fill="#2563eb" />
+                    </marker>
+                </defs>
+            </svg>
+            <p class="mt-4 text-slate-500">[도식 1: SSL/TLS를 통한 데이터 암호화 및 보호 공정]</p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="p-4 bg-blue-50 border-l-4 border-blue-500">
+                <p><strong>SSL (Secure Sockets Layer, 보안 소켓 계층):</strong> 1994년 Netscape(넷스케이프) 사에서 처음 개발한 보안 프로토콜입니다. 현재는 보안 취약점으로 인해 사용되지 않으나 명칭은 관용적으로 계속 쓰입니다.</p>
+            </div>
+            <div class="p-4 bg-blue-50 border-l-4 border-blue-500">
+                <p><strong>TLS (Transport Layer Security, 전송 계층 보안):</strong> SSL의 취약점을 보완하여 IETF(Internet Engineering Task Force, 국제 인터넷 표준화 기구)에서 표준화한 프로토콜입니다. 최신 버전은 TLS 1.3입니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 2: Foundations & Limits -->
+    <section class="content-block">
+        <h2 class="text-3xl font-bold mb-6">2. HTTPS의 확산과 보안 가시성 저하</h2>
+        
+        <div class="mb-8">
+            <p class="text-lg mb-4">전 세계 웹 트래픽의 대다수는 <span class="highlight">HTTPS (Hypertext Transfer Protocol Secure, 보안 하이퍼텍스트 전송 프로토콜)</span>로 암호화되어 전송됩니다.</p>
+            <p class="text-lg mb-4">암호화는 사용자의 데이터를 보호하는 강력한 도구이지만, 역설적으로 기업 내 보안 시스템이 패킷 내부의 위협 요소를 감지하지 못하게 하는 <span class="highlight">보안 사각지대</span>를 만들어냅니다.</p>
+        </div>
+
+        <div class="diagram-box">
+            <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" class="mx-auto w-full max-w-2xl">
+                <!-- Client -->
+                <rect x="50" y="50" width="120" height="80" rx="10" fill="#3b82f6"/>
+                <text x="110" y="100" text-anchor="middle" fill="white" font-weight="bold">사용자(Client)</text>
+                <!-- Encrypted Tunnel -->
+                <path d="M 170 90 L 630 90" stroke="#94a3b8" stroke-width="20" stroke-dasharray="10,5"/>
+                <text x="400" y="80" text-anchor="middle" fill="#64748b" font-size="14">암호화된 터널 (TLS Tunnel)</text>
+                <!-- Server -->
+                <rect x="630" y="50" width="120" height="80" rx="10" fill="#1e293b"/>
+                <text x="690" y="100" text-anchor="middle" fill="white" font-weight="bold">서버(Server)</text>
+                <!-- Warning Sign -->
+                <circle cx="400" cy="130" r="25" fill="#ef4444"/>
+                <text x="400" y="137" text-anchor="middle" fill="white" font-weight="bold" font-size="24">?</text>
+                <text x="400" y="175" text-anchor="middle" fill="#ef4444" font-size="14">보안 장비가 위협을 읽을 수 없음</text>
+            </svg>
+            <p class="mt-4 text-slate-500">[도식 2: 암호화 통신으로 인한 인프라 가시성 차단]</p>
+        </div>
+
+        <div class="p-4 bg-slate-50 border-l-4 border-slate-300">
+            <p><strong>DPI (Deep Packet Inspection, 심층 패킷 분석):</strong> 네트워크 패킷의 헤더 정보를 넘어 데이터 본문(Payload)까지 정밀하게 조사하여 비정상 행위나 악성 코드를 탐지하는 기술입니다.</p>
+        </div>
+    </section>
+
+    <!-- Page 3: Mechanism -->
+    <section class="content-block">
+        <h2 class="text-3xl font-bold mb-6">3. SSL/TLS Inspection의 동작 원리</h2>
+        
+        <div class="mb-8">
+            <p class="text-lg mb-4"><span class="highlight">SSL Inspection</span>은 보안 장비가 중간에서 프록시(Proxy) 역할을 수행하며 트래픽을 일시적으로 복호화하는 과정입니다.</p>
+            <p class="text-lg">이를 통해 암호화된 트래픽 내부에 숨겨진 <span class="highlight">C&C (Command and Control, 명령 및 제어)</span> 통신이나 악성 파일의 전송을 사전에 차단할 수 있습니다.</p>
+        </div>
+
+        <div class="diagram-box">
+            <svg viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" class="mx-auto w-full max-w-2xl">
+                <!-- Client -->
+                <rect x="20" y="80" width="100" height="60" rx="5" fill="#3b82f6"/>
+                <text x="70" y="115" text-anchor="middle" fill="white" font-size="12">사용자</text>
+                
+                <!-- Inspection Device -->
+                <rect x="330" y="60" width="140" height="100" rx="5" fill="#f59e0b"/>
+                <text x="400" y="110" text-anchor="middle" fill="white" font-weight="bold">Inspection 장비</text>
+                <text x="400" y="130" text-anchor="middle" fill="white" font-size="10">(복호화 및 검사)</text>
+                
+                <!-- Server -->
+                <rect x="680" y="80" width="100" height="60" rx="5" fill="#1e293b"/>
+                <text x="730" y="115" text-anchor="middle" fill="white" font-size="12">웹 서버</text>
+                
+                <!-- Arrows -->
+                <path d="M 120 100 L 330 100" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)"/>
+                <text x="225" y="90" text-anchor="middle" font-size="10">Session A (암호화)</text>
+                
+                <path d="M 470 100 L 680 100" stroke="#1e293b" stroke-width="3" marker-end="url(#arrow)"/>
+                <text x="575" y="90" text-anchor="middle" font-size="10">Session B (암호화)</text>
+                
+                <defs>
+                    <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                      <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+                    </marker>
+                </defs>
+            </svg>
+            <p class="mt-4 text-slate-500">[도식 3: MITM 방식을 활용한 양방향 세션 분리 및 복호화]</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div class="p-6 border border-amber-200 rounded-lg bg-amber-50">
+                <h3 class="font-bold text-amber-800 mb-2 text-xl">1단계: 세션 분리</h3>
+                <p>클라이언트-장비, 장비-서버 간에 각각 <span class="highlight">독립적인 TLS 핸드쉐이크 (TLS Handshake, 전송 계층 보안 악수)</span>를 체결합니다.</p>
+            </div>
+            <div class="p-6 border border-amber-200 rounded-lg bg-amber-50">
+                <h3 class="font-bold text-amber-800 mb-2 text-xl">2단계: 콘텐츠 검사</h3>
+                <p>복호화된 평문 데이터를 대상으로 <span class="highlight">Antivirus (백신)</span> 및 <span class="highlight">DLP (Data Loss Prevention, 데이터 유출 방지)</span> 필터링을 수행합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 4: Implementation & Privacy -->
+    <section class="content-block">
+        <h2 class="text-3xl font-bold mb-6">4. 실무 구축 전략 및 예외 처리 정책</h2>
+        
+        <div class="mb-8">
+            <p class="text-lg mb-4">성능 저하와 법적 이슈를 예방하기 위해 모든 데이터를 복호화하기보다, 위험도가 높은 트래픽을 선별적으로 검사하는 전략이 필요합니다.</p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-slate-200">
+                <thead class="bg-slate-800 text-white">
+                    <tr>
+                        <th class="py-3 px-6 text-left">구분</th>
+                        <th class="py-3 px-6 text-left">주요 이슈</th>
+                        <th class="py-3 px-6 text-left">대응 방안</th>
+                    </tr>
+                </thead>
+                <tbody class="text-slate-700">
+                    <tr class="border-b">
+                        <td class="py-4 px-6 font-bold">인증서 신뢰</td>
+                        <td class="py-4 px-6">단말 브라우저에서 '보안 경고' 발생</td>
+                        <td class="py-4 px-6">사설 CA 인증서를 <span class="highlight">GPO (Group Policy Object)</span>로 배포</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="py-4 px-6 font-bold">성능 최적화</td>
+                        <td class="py-4 px-6">복호화 연산으로 인한 처리 지연</td>
+                        <td class="py-4 px-6">전 전용 가속 칩이 탑재된 보안 솔루션 도입</td>
+                    </tr>
+                    <tr>
+                        <td class="py-4 px-6 font-bold">프라이버시</td>
+                        <td class="py-4 px-6">개인 금융 및 건강 정보 유출 위험</td>
+                        <td class="py-4 px-6">화이트리스트 기반 <span class="highlight">Bypass (우회)</span> 목록 운영</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-12 p-6 bg-blue-50 border-2 border-blue-200 rounded-xl">
+            <h4 class="text-xl font-bold text-blue-800 mb-4">보안 전문가를 위한 실전 팁 (Expert Tip)</h4>
+            <p class="mb-2"><strong>1. 인증서 핀닝(Pinning) 주의:</strong> 일부 앱은 특정 인증서만 신뢰하도록 고정(Pinning)되어 있어 SSL Inspection 적용 시 통신이 차단될 수 있으므로 예외 처리가 필요합니다.</p>
+            <p><strong>2. 로그 관리:</strong> 복호화된 트래픽에 개인정보가 포함될 수 있으므로, 보안 장비의 로그 기록 시 민감 정보 마스킹 처리를 반드시 수행하십시오.</p>
+        </div>
+
+        <div class="footer-note">
+            <p>* <strong>CA (Certificate Authority, 인증 기관):</strong> 디지털 인증서의 발급과 신뢰성을 보증하는 공신력 있는 제3자 기관입니다.</p>
+            <p>* <strong>GPO (Group Policy Object, 그룹 정책 개체):</strong> 마이크로소프트 액티브 디렉토리 환경에서 다수의 사용자 단말 설정을 중앙 제어하는 기능입니다.</p>
+            <p>* <strong>TLS Handshake (전송 계층 보안 악수):</strong> 통신 시작 전 암호화 알고리즘을 합의하고 키를 교환하는 인증 절차입니다.</p>
+        </div>
+    </section>
+
+    <!-- Cloud Service Note -->
+    <section class="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <p class="text-red-700 font-bold">⚠️ 클라우드 서비스 주의사항 (AWS 기준)</p>
+        <p class="text-sm text-red-600">AWS Network Firewall(네트워크 방화벽)의 TLS 검사 기능을 사용할 경우, 트래픽 처리량(GB당) 및 활성화 시간당 비용이 발생하므로 예산 수립 시 <strong>데이터 처리 비용</strong>을 정밀하게 산출해야 합니다.</p>
+        <p class="text-xs text-red-500 mt-1">참조: <a href="https://aws.amazon.com/network-firewall/pricing/" target="_blank" class="underline">AWS Network Firewall 공식 요금 안내</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-slate-300 text-center text-slate-500">
+        <p>© 2026 IP Vocational Training Specialist Program. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
